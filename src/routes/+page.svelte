@@ -95,23 +95,23 @@
 			{ondragover} {ondrop} {onmousedown} {onmouseup}>
 	</canvas>
 
-		<Draggable bind:pos>
+		<Draggable bind:pos bind:zoom>
 			<h1>Hello diddy</h1>
 		</Draggable>
 
-		<Picture bind:pos></Picture>
+		<Picture bind:pos bind:zoom></Picture>
 
 		{#if pictures.length != 0}
 			{#each pictures as picture}
-				<Picture bind:pos src={picture} dragged={true}></Picture>
+				<Picture bind:pos bind:zoom src={picture} dragged={true}></Picture>
 			{/each}
 		{/if}
 
-		<Note bind:pos></Note>
+		<Note bind:pos bind:zoom></Note>
 
 		{#if documents.length != 0}
 			{#each documents as document}
-				<Document bind:pos type="pdf" src={document}></Document>
+				<Document bind:pos bind:zoom type="pdf" src={document}></Document>
 			{/each}
 		{/if}
 

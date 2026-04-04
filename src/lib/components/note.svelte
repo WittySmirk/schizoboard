@@ -1,8 +1,12 @@
 <script lang="ts">
 	import Draggable from "./draggable.svelte";
 
-	let { pos = $bindable({ x: 0, y: 0 }) } = $props<{
+	let { 
+		pos = $bindable({ x: 0, y: 0 }),
+		zoom = $bindable(1)
+		}= $props<{
 		pos: { x: number; y: number };
+		zoom: number;
 	}>();
 	let text = $state("Test");
 
@@ -43,7 +47,7 @@
 	});
 
 </script>
-	<Draggable bind:pos bind:down bind:doubleclick>
+	<Draggable bind:pos bind:down bind:doubleclick bind:zoom>
 		<div role="navigation"   style="transform: rotate({angle}deg)"   class="relative w-48 h-48 bg-[url(/src/lib/assets/stickynote.png)]">
 			{#if !doubleclick}
 				<p class="absolute inset-3 overflow-hidden whitespace-pre-wrap wrap-break-word resize-none">{text}</p>
