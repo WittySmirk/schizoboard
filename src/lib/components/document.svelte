@@ -16,7 +16,6 @@
 		src: string;
 		index: number;
 		drop?: { x: number; y: number };
-		dragged: boolean;
 		focused: number | undefined;
 		zoom: number;
 	}>();

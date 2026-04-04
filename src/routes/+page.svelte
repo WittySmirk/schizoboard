@@ -134,7 +134,9 @@
 	{/each}
 
 	<!-- TODO: add styling to upload button -->
+	<!--
 	<input type="file" id="upload" {onchange} hidden />
 	<label for="upload">Upload File</label>
+	-->
 </div>
 
