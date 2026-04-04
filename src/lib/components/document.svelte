@@ -29,10 +29,10 @@
 	bind:down
 	bind:zoom
 	{index}
-	initialX={drop ? drop.x : 0}
-	initialY={drop ? drop.y : 0}
+	initialPos={{ x: drop ? drop.x : 0, y: drop ? drop.y : 0, w: 650, h: 875 }}
+	type="document"
 >
-	<div class="h-205">
+	<div class="h-full">
 		<PdfViewer {src}>
 			<PdfRenderer backgroundColor="#FFFFFF" />
 		</PdfViewer>

@@ -2,18 +2,18 @@
 	import type { Snippet } from 'svelte';
 
 	let {
-		initialX = 0,
-		initialY = 0,
+		initialPos,
 		children,
 		down = $bindable(false),
 		doubleclick = $bindable(false),
 		pos = $bindable({ x: 0, y: 0 }),
 		index,
 		focused = $bindable(),
-		zoom = $bindable(1)
+		zoom = $bindable(1),
+		type,
+		aspectRatio
 	} = $props<{
-		initialX?: number;
-		initialY?: number;
+		initialPos: { x: number; y: number; w: number; h: number };
 		children: Snippet;
 		down?: boolean;
 		doubleclick?: boolean;
@@ -21,14 +21,11 @@
 		index: number;
 		focused: number | undefined;
 		zoom: number;
+		type: 'document' | 'note' | 'picture';
+		aspectRatio?: number;
 	}>();
 
-	let object: { x: number; y: number; w: number; h: number } = $state({
-		x: initialX,
-		y: initialY,
-		w: 200,
-		h: 200
-	});
+	let object: { x: number; y: number; w: number; h: number } = $state(initialPos);
 
 	let resizing = $state(false);
 	let resizeStart: { x: number; y: number; w: number; h: number } | undefined = undefined;
@@ -39,7 +36,9 @@
 	$effect(() => {
 		if (resizing && resizeStart != undefined) {
 			object.w = resizeStart.w + (pos.x - resizeStart.x) / zoom;
-			object.h = resizeStart.h + (pos.y - resizeStart.y) / zoom;
+			object.h = aspectRatio
+				? object.w / aspectRatio
+				: resizeStart.h + (pos.y - resizeStart.y) / zoom;
 		}
 		if (down && !resizing) {
 			const mouseX = pos.x / zoom;
@@ -85,12 +84,15 @@
 	style="transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;"
 >
 	{@render children()}
-	<div
-		onmousedown={resizedown}
-		class="absolute right-0 bottom-0 h-1 w-1 cursor-se-resize bg-blue-500"
-	>
-		a
-	</div>
+
+	{#if type != 'document'}
+		<div
+			onmousedown={resizedown}
+			class="absolute right-0 bottom-0 h-1 h-4 w-1 w-4 cursor-se-resize bg-blue-500 opacity-0"
+		>
+			a
+		</div>
+	{/if}
 </div>
 
 <svelte:window {onmouseup} />

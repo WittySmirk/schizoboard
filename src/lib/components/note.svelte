@@ -51,11 +51,21 @@
 	});
 </script>
 
-<Draggable bind:pos bind:down bind:doubleclick bind:zoom bind:focused {index}>
+<Draggable
+	initialPos={{ x: 0, y: 0, w: 200, h: 200 }}
+	bind:pos
+	bind:down
+	bind:doubleclick
+	bind:zoom
+	bind:focused
+	{index}
+	type="note"
+	aspectRatio={1}
+>
 	<div
 		role="navigation"
 		style="transform: rotate({angle}deg)"
-		class="h-full w-full bg-[url(/src/lib/assets/stickynote.png)]"
+		class="h-full w-full bg-[url(/src/lib/assets/stickynote.png)] bg-cover"
 	>
 		{#if !doubleclick}
 			<p class="absolute inset-3 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap">

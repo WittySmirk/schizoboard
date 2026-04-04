@@ -16,15 +16,31 @@
 		focused: number | undefined;
 		zoom: number;
 	}>();
+
+	let aspectRatio: number = $state(0);
+	let natSize: { w: number; h: number } = $state({ w: 0, h: 0 });
+	let loaded = $state(false);
+	function onimageload(e: Event) {
+		const img = e.currentTarget as HTMLImageElement;
+
+		aspectRatio = img.naturalWidth / img.naturalHeight;
+		natSize = { w: img.naturalWidth, h: img.naturalHeight };
+		loaded = true;
+	}
 </script>
 
-<Draggable
-	bind:pos
-	bind:zoom
-	initialX={drop ? drop.x : 0}
-	initialY={drop ? drop.y : 0}
-	bind:focused
-	{index}
->
-	<img {src} />
-</Draggable>
+<img {src} onload={onimageload} class="hidden" />
+
+{#if loaded}
+	<Draggable
+		bind:pos
+		bind:zoom
+		initialPos={{ x: drop ? drop.x : 0, y: drop ? drop.y : 0, w: natSize.w, h: natSize.h }}
+		bind:focused
+		{index}
+		type="picture"
+		{aspectRatio}
+	>
+		<img class="h-full w-full object-cover" {src} />
+	</Draggable>
+{/if}
