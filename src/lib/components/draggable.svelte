@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 	let {
 		initialX = 0,
 		initialY = 0,
 		children,
 		down = $bindable(false),
 		doubleclick = $bindable(false),
-		pos = $bindable({ x: 0, y: 0 }),
+		pos = $bindable({ x: 0, y: 0 })
 	} = $props<{
 		initialX?: number;
 		initialY?: number;
@@ -43,12 +43,7 @@
 	}
 </script>
 
-<div
-	{onmousedown}
-	{ondblclick}
-	class="absolute"
-	style="transform: translate({x}px, {y}px); will-change: transform; isolation: isolate;"
->
+<div {onmousedown} {ondblclick} class="absolute" style="transform: translate({x}px, {y}px);">
 	{#if down}
 		<div class="absolute inset-0 z-10" />
 	{/if}
