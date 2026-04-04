@@ -1,28 +1,29 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import type { Snippet } from "svelte";
 	let {
 		initialX = 0,
 		initialY = 0,
 		children,
 		down = $bindable(false),
-		doubleclick = $bindable(false)
+		doubleclick = $bindable(false),
+		pos = $bindable({ x: 0, y: 0 }),
 	} = $props<{
 		initialX?: number;
 		initialY?: number;
 		children: Snippet;
 		down?: boolean;
 		doubleclick?: boolean;
+		pos: { x: number; y: number };
 	}>();
 	let x: number = $state(initialX);
 	let y: number = $state(initialY);
 
-	function onmousemove(e: MouseEvent) {
-		e.preventDefault();
+	$effect(() => {
 		if (down) {
-			x = e.clientX;
-			y = e.clientY;
+			x = pos.x;
+			y = pos.y;
 		}
-	}
+	});
 	function onmousedown() {
 		down = true;
 	}
@@ -31,13 +32,18 @@
 		down = false;
 	}
 
-	function ondblclick () {
+	function ondblclick() {
 		doubleclick = true;
-		
 	}
 </script>
 
-<div {onmousedown} {ondblclick} class="absolute" style:top="{y}px" style:left="{x}px">
+<div
+	{onmousedown}
+	{ondblclick}
+	class="absolute"
+	style:top="{y}px"
+	style:left="{x}px"
+>
 	{@render children()}
 </div>
 

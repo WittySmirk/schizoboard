@@ -1,13 +1,14 @@
 <script lang="ts">
-	import Draggable from '$lib/components/draggable.svelte';
-	import Picture from '$lib/components/picture.svelte';
-	import Note from '$lib/components/note.svelte';
+	import Draggable from "$lib/components/draggable.svelte";
+	import Picture from "$lib/components/picture.svelte";
+	import Note from "$lib/components/note.svelte";
 
 	let pictures: string[] = $state([]);
+	let pos: { x: number; y: number } = $state({ x: 0, y: 0 });
 
 	function parseFiles(files: FileList) {
 		[...files].map((file) => {
-			if (file.type.includes('image')) {
+			if (file.type.includes("image")) {
 				const src = URL.createObjectURL(file);
 				pictures.push(src);
 			}
@@ -31,6 +32,11 @@
 			parseFiles(files);
 		}
 	}
+
+	function onmousemove(e: MouseEvent) {
+		e.preventDefault();
+		pos = { x: e.clientX, y: e.clientY };
+	}
 </script>
 
 <head>
@@ -38,21 +44,23 @@
 </head>
 
 <div class="absolute h-full w-full" {ondragover} {ondrop} role="main">
-	<Draggable>
+	<Draggable bind:pos>
 		<h1>Hello diddy</h1>
 	</Draggable>
 
-	<Picture></Picture>
+	<Picture bind:pos></Picture>
 
 	{#if pictures.length != 0}
 		{#each pictures as picture}
-			<Picture src={picture}></Picture>
+			<Picture bind:pos src={picture}></Picture>
 		{/each}
 	{/if}
 
-	<Note></Note>
+	<Note bind:pos></Note>
 
 	<!-- TODO: add styling to upload button -->
 	<input type="file" id="upload" {onchange} hidden />
 	<label for="upload">Upload File</label>
 </div>
+
+<svelte:window {onmousemove} />
