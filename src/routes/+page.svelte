@@ -12,11 +12,12 @@
 	let focused: number | undefined = $state();
 
 	let zoom = $state(1);
-	const ZOOM_FACTOR = 0.1;
+	const ZOOM_FACTOR = 0.05;
 	let scrollVal = $state(0);
 	let isPanning = false;
 	let lastPan = $state({ x: 0, y: 0 });
 	let offset = $state({ x: 0, y: 0 });
+	let drop: { x: number; y: number } | undefined = $state();
 
 	function parseFiles(files: FileList) {
 		[...files].map((file) => {
@@ -45,7 +46,8 @@
 	function ondrop(e: DragEvent) {
 		e.preventDefault();
 		if (e.dataTransfer != null && e.dataTransfer.files) {
-			pos = { x: e.x, y: e.y };
+			//pos = { x: (e.clientX - offset.x) / zoom, y: (e.clientY - offset.y) / zoom };
+			drop = { x: (e.clientX - offset.x) / zoom, y: (e.clientY - offset.y) / zoom };
 			const files = e.dataTransfer.files;
 			parseFiles(files);
 		}
@@ -103,10 +105,14 @@
 
 <svelte:window {onwheel} bind:scrollY={scrollVal} {onmousemove} {onkeydown} />
 
-<div class="fixed inset-0" style="transform: translate({offset.x}px, {offset.y}px) scale({zoom})">
+<div
+	class="fixed inset-0"
+	style="transform-origin: 0 0; transform: translate({offset.x}px, {offset.y}px) scale({zoom})"
+>
 	<canvas
 		class="fixed -z-9999 h-full w-full bg-[url(/src/lib/assets/corkboard.jpg)] bg-size-[200px] bg-repeat inset-shadow-[0_0_200px_rgba(0,0,0,0.9)] brightness-95"
-		style="transform: scale({1 / zoom}) translate({-offset.x}px, {-offset.y}px);
+		style="transform-origin: 0 0; transform: scale({1 /
+			zoom}) translate({-offset.x}px, {-offset.y}px);
 					background-size: {50 * zoom}%;
 					background-position: {offset.x}px {offset.y}px;"
 		{ondragover}
@@ -119,19 +125,11 @@
 
 	{#each entities as entity, i}
 		{#if entity.type == 'picture'}
-			<Picture bind:focused bind:pos bind:zoom src={entity.src} dragged={true} index={i} />
+			<Picture bind:focused bind:pos bind:zoom src={entity.src} index={i} {drop} />
 		{:else if entity.type == 'note'}
 			<Note bind:focused bind:pos bind:zoom index={i} />
 		{:else if entity.type == 'document'}
-			<Document
-				bind:focused
-				bind:pos
-				bind:zoom
-				type="pdf"
-				src={entity.src!}
-				index={i}
-				dragged={true}
-			/>
+			<Document bind:focused bind:pos bind:zoom type="pdf" src={entity.src!} index={i} {drop} />
 		{/if}
 	{/each}
 
