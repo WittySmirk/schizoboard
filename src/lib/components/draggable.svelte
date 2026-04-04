@@ -29,7 +29,7 @@
 	}
 </script>
 
-<div {onmousedown} class="absolute" style:top="{y}px" style:left="{x}px">
+<div {onmousedown} class="absolute" style:top="{y}px" style:left="{x}px" role="group">
 	{@render children()}
 </div>
 

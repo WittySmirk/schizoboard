@@ -4,15 +4,30 @@
 
 	let pictures: string[] = $state([]);
 
+	function parseFiles(files: FileList) {
+		[...files].map((file) => {
+			if (file.type.includes('image')) {
+				const src = URL.createObjectURL(file);
+				pictures.push(src);
+			}
+		});
+	}
+
 	function onchange(e: Event & { currentTarget: HTMLInputElement }) {
 		const files = e.currentTarget.files;
 		if (files != null) {
-			[...files].map((file) => {
-				if (file.type.includes('image')) {
-					const src = URL.createObjectURL(file);
-					pictures.push(src);
-				}
-			});
+			parseFiles(files);
+		}
+	}
+	function ondragover(e: Event) {
+		e.preventDefault();
+	}
+
+	function ondrop(e: DragEvent) {
+		e.preventDefault();
+		if (e.dataTransfer != null && e.dataTransfer.files) {
+			const files = e.dataTransfer.files;
+			parseFiles(files);
 		}
 	}
 </script>
@@ -21,20 +36,20 @@
 	<title>schizoboard</title>
 </head>
 
-<!-- TODO: drag and drop upload (handle file and picture) -->
+<div class="absolute h-full w-full" {ondragover} {ondrop} role="main">
+	<Draggable>
+		<h1>Hello diddy</h1>
+	</Draggable>
 
-<Draggable>
-	<h1>Hello diddy</h1>
-</Draggable>
+	<Picture></Picture>
 
-<Picture></Picture>
+	{#if pictures.length != 0}
+		{#each pictures as picture}
+			<Picture src={picture}></Picture>
+		{/each}
+	{/if}
 
-{#if pictures.length != 0}
-	{#each pictures as picture}
-		<Picture src={picture}></Picture>
-	{/each}
-{/if}
-
-<!-- TODO: add styling to upload button -->
-<input type="file" id="upload" {onchange} hidden />
-<label for="upload">Upload File</label>
+	<!-- TODO: add styling to upload button -->
+	<input type="file" id="upload" {onchange} hidden />
+	<label for="upload">Upload File</label>
+</div>
