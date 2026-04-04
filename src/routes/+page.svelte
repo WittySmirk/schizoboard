@@ -77,7 +77,15 @@
 	}
 
 	function onwheel(e: WheelEvent) {
-		zoom += e.deltaY > 0 ? -ZOOM_FACTOR : ZOOM_FACTOR;
+		let prevZoom = zoom;
+		let newZoom = zoom + (e.deltaY > 0 ? -ZOOM_FACTOR : ZOOM_FACTOR);
+
+		if (newZoom < 0.1 || newZoom > 2) return;
+		zoom = newZoom;
+
+		offset.x = e.clientX - (e.clientX - offset.x) * (zoom / prevZoom);
+		offset.y = e.clientY - (e.clientY - offset.y) * (zoom / prevZoom);
+		
 	}
 
 	function onmousedown(e: MouseEvent) {
@@ -106,11 +114,11 @@
 <svelte:window {onwheel} bind:scrollY={scrollVal} {onmousemove} {onkeydown} />
 
 <div
-	class="fixed inset-0"
+	class="fixed inset-0 "
 	style="transform-origin: 0 0; transform: translate({offset.x}px, {offset.y}px) scale({zoom})"
 >
 	<canvas
-		class="fixed -z-9999 h-full w-full bg-[url(/src/lib/assets/corkboard.jpg)] bg-size-[200px] bg-repeat inset-shadow-[0_0_200px_rgba(0,0,0,0.9)] brightness-95"
+		class="fixed -z-9999 h-full w-full bg-[url(/src/lib/assets/corkboard.jpg)] bg-size-[200px] bg-repeat inset-shadow-[0_0_200px_rgba(0,0,0,0.9)] brightness-95 overflow-hidden"
 		style="transform-origin: 0 0; transform: scale({1 /
 			zoom}) translate({-offset.x}px, {-offset.y}px);
 					background-size: {50 * zoom}%;
@@ -135,6 +143,6 @@
 
 	<!-- TODO: add styling to upload button -->
 	<input type="file" id="upload" {onchange} hidden />
-	<label for="upload">Upload File</label>
+	<label for="upload" class="select-none">Upload File</label>
 </div>
 

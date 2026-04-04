@@ -4,7 +4,6 @@
 
 	let {
 		pos = $bindable({ x: 0, y: 0 }),
-		type,
 		src,
 		index,
 		drop,
@@ -16,7 +15,6 @@
 		src: string;
 		index: number;
 		drop?: { x: number; y: number };
-		dragged: boolean;
 		focused: number | undefined;
 		zoom: number;
 	}>();
@@ -33,7 +31,7 @@
 	initialX={drop ? drop.x : 0}
 	initialY={drop ? drop.y : 0}
 >
-	<div class="h-205">
+	<div class="h-205 select-none">
 		<PdfViewer {src}>
 			<PdfRenderer backgroundColor="#FFFFFF" />
 		</PdfViewer>

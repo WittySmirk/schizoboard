@@ -26,5 +26,5 @@
 	bind:focused
 	{index}
 >
-	<img {src} />
+	<img class="select-none" {src} />
 </Draggable>

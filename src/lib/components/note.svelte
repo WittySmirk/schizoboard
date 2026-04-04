@@ -51,11 +51,11 @@
 	});
 </script>
 	<Draggable bind:pos bind:down bind:doubleclick bind:zoom bind:focused {index}>
-		<div role="navigation"   style="transform: rotate({angle}deg)"   class="relative w-48 h-48 bg-[url(/src/lib/assets/stickynote.png)]">
+		<div role="navigation"   style="transform: rotate({angle}deg)"   class="relative w-48 h-48 bg-[url(/src/lib/assets/stickynote.png)] select-none">
 			{#if !doubleclick}
-				<p class="absolute inset-3 overflow-hidden whitespace-pre-wrap wrap-break-word resize-none">{text}</p>
+				<p class="absolute inset-3 overflow-hidden whitespace-pre-wrap wrap-break-word resize-none select-none">{text}</p>
 			{:else}
-				<textarea class="absolute inset-3 overflow-hidden whitespace-pre-wrap wrap-break-word resize-none"
+				<textarea class="absolute inset-3 overflow-hidden whitespace-pre-wrap wrap-break-word resize-none select-none"
 					bind:value={text}  
 					autofocus 
 					{onblur}>

@@ -63,7 +63,7 @@
 	{onclick}
 	{onmousedown}
 	{ondblclick}
-	class="absolute"
+	class="absolute select-none"
 	style="transform: translate({x}px, {y}px);"
 >
 	{#if down}
