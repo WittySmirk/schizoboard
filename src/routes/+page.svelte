@@ -53,7 +53,7 @@
 	}
 
 	function onkeydown(e: KeyboardEvent) {
-		if (focused && e.key == 'Backspace') {
+		if (focused != undefined && e.key == 'Backspace') {
 			console.log('removing at ', focused);
 			entities.splice(focused, 1);
 			entities = entities;
