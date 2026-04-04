@@ -3,6 +3,7 @@
 	import { PdfViewer, PdfRenderer } from 'svelte-pdf-view';
 
 	let {
+		initialPos,
 		pos = $bindable({ x: 0, y: 0 }),
 		type,
 		src,
@@ -11,6 +12,7 @@
 		focused = $bindable(),
 		zoom = $bindable(1)
 	} = $props<{
+		initialPos?: { x: number; y: number };
 		pos: { x: number; y: number };
 		type: 'pdf' | 'md';
 		src: string;
@@ -29,7 +31,7 @@
 	bind:down
 	bind:zoom
 	{index}
-	initialPos={{ x: drop ? drop.x : 0, y: drop ? drop.y : 0, w: 650, h: 875 }}
+	initialPos={{ x: drop ? drop.x : initialPos.x, y: drop ? drop.y : initialPos.y, w: 650, h: 875 }}
 	type="document"
 >
 	<div class="h-full">

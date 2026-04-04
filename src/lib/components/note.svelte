@@ -2,11 +2,13 @@
 	import Draggable from './draggable.svelte';
 
 	let {
+		initialPos,
 		pos = $bindable({ x: 0, y: 0 }),
 		index,
 		zoom = $bindable(1),
 		focused = $bindable()
 	} = $props<{
+		initialPos: { x: number; y: number };
 		pos: { x: number; y: number };
 		index: number;
 		focused: number | undefined;
@@ -52,7 +54,7 @@
 </script>
 
 <Draggable
-	initialPos={{ x: 0, y: 0, w: 200, h: 200 }}
+	initialPos={{ x: initialPos.x, y: initialPos.y, w: 200, h: 200 }}
 	bind:pos
 	bind:down
 	bind:doubleclick

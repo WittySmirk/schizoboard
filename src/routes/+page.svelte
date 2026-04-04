@@ -1,13 +1,19 @@
+<script lang="ts" module>
+	export type entity = {
+		type: 'note' | 'picture' | 'document';
+		src?: string;
+		initial?: { x: number; y: number };
+	};
+</script>
+
 <script lang="ts">
-	import Draggable from '$lib/components/draggable.svelte';
 	import Picture from '$lib/components/picture.svelte';
 	import Note from '$lib/components/note.svelte';
 	import Document from '$lib/components/document.svelte';
-
-	type entity = { type: 'note' | 'picture' | 'document'; src?: string };
+	import Toolbar from '$lib/components/toolbar.svelte';
 
 	// TODO: add actual drag checking
-	let entities: entity[] = $state([{ type: 'note' }]);
+	let entities: entity[] = $state([{ type: 'note', initial: { x: 0, y: 0 } }]);
 	let pos: { x: number; y: number } = $state({ x: 0, y: 0 });
 	let focused: number | undefined = $state();
 
@@ -19,26 +25,23 @@
 	let offset = $state({ x: 0, y: 0 });
 	let drop: { x: number; y: number } | undefined = $state();
 
-	function parseFiles(files: FileList) {
+	let create: 'note' | 'picture' | 'document' | undefined;
+
+	function parseFiles(files: FileList, initial?: { x: number; y: number }) {
 		[...files].map((file) => {
 			console.log(file.type);
 			if (file.type.includes('image')) {
 				const src = URL.createObjectURL(file);
-				entities.push({ type: 'picture', src });
+				entities.push({ type: 'picture', src, initial });
 			}
 			if (file.type.includes('pdf')) {
 				const src = URL.createObjectURL(file);
-				entities.push({ type: 'document', src });
+				entities.push({ type: 'document', src, initial });
 			}
 		});
 	}
 
-	function onchange(e: Event & { currentTarget: HTMLInputElement }) {
-		const files = e.currentTarget.files;
-		if (files != null) {
-			parseFiles(files);
-		}
-	}
+	function onchange() {}
 	function ondragover(e: Event) {
 		e.preventDefault();
 	}
@@ -54,6 +57,51 @@
 	}
 
 	function onclick(e: MouseEvent) {
+		if (create != undefined) {
+			switch (create) {
+				case 'note':
+					entities.push({
+						type: 'note',
+						initial: { x: (e.clientX - offset.x) / zoom, y: (e.clientY - offset.y) / zoom }
+					});
+					break;
+				case 'picture':
+					{
+						const input: HTMLInputElement = document.createElement('input');
+						input.type = 'file';
+						input.accept = 'image/*';
+						input.onchange = (ev: Event) => {
+							const files = (ev.currentTarget as HTMLInputElement).files;
+							if (files != null) {
+								parseFiles(files, {
+									x: (e.clientX - offset.x) / zoom,
+									y: (e.clientY - offset.y) / zoom
+								});
+							}
+						};
+						input.click();
+					}
+					break;
+				case 'document':
+					{
+						const input: HTMLInputElement = document.createElement('input');
+						input.type = 'file';
+						input.accept = 'application/pdf';
+						input.onchange = (ev: Event) => {
+							const files = (ev.currentTarget as HTMLInputElement).files;
+							if (files != null) {
+								parseFiles(files, {
+									x: (e.clientX - offset.x) / zoom,
+									y: (e.clientY - offset.y) / zoom
+								});
+							}
+						};
+						input.click();
+					}
+					break;
+			}
+			create = undefined;
+		}
 		focused = undefined;
 	}
 
@@ -125,11 +173,28 @@
 
 	{#each entities as entity, i}
 		{#if entity.type == 'picture'}
-			<Picture bind:focused bind:pos bind:zoom src={entity.src} index={i} {drop} />
+			<Picture
+				bind:focused
+				bind:pos
+				bind:zoom
+				src={entity.src}
+				index={i}
+				{drop}
+				initialPos={entity.initial}
+			/>
 		{:else if entity.type == 'note'}
-			<Note bind:focused bind:pos bind:zoom index={i} />
+			<Note bind:focused bind:pos bind:zoom index={i} initialPos={entity.initial!} />
 		{:else if entity.type == 'document'}
-			<Document bind:focused bind:pos bind:zoom type="pdf" src={entity.src!} index={i} {drop} />
+			<Document
+				bind:focused
+				bind:pos
+				bind:zoom
+				type="pdf"
+				src={entity.src!}
+				index={i}
+				{drop}
+				initialPos={entity.initial}
+			/>
 		{/if}
 	{/each}
 
@@ -140,3 +205,4 @@
 	-->
 </div>
 
+<Toolbar bind:create />
