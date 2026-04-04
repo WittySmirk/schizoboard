@@ -1,5 +1,14 @@
 <script lang="ts">
-	let { initialX = 100, initialY = 100 } = $props();
+	import type { Snippet } from 'svelte';
+	let {
+		initialX = 0,
+		initialY = 0,
+		children
+	} = $props<{
+		initialX?: number;
+		initialY?: number;
+		children: Snippet;
+	}>();
 	let x: number = $state(initialX);
 	let y: number = $state(initialY);
 
@@ -19,9 +28,8 @@
 	}
 </script>
 
-<!-- TODO: props -->
 <div {onmousedown} class="absolute bg-blue-500" style:top="{y}px" style:left="{x}px">
-	<h1>hello diddy</h1>
+	{@render children()}
 </div>
 
 <svelte:window {onmousemove} {onmouseup} />

@@ -2,4 +2,9 @@
 	import Draggable from '$lib/components/draggable.svelte';
 </script>
 
-<Draggable />
+<head>
+	<title>schizoboard</title>
+</head>
+<Draggable>
+	<h1>Hello diddy</h1>
+</Draggable>
