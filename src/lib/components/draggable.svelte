@@ -16,14 +16,19 @@
 	let x: number = $state(initialX);
 	let y: number = $state(initialY);
 
+	let offsetX = 0;
+	let offsetY = 0;
+
 	function onmousemove(e: MouseEvent) {
 		e.preventDefault();
 		if (down) {
-			x = e.clientX;
-			y = e.clientY;
+			x = e.clientX + offsetX;
+			y = e.clientY + offsetY;
 		}
 	}
-	function onmousedown() {
+	function onmousedown(e: MouseEvent) {
+		offsetX = x - e.clientX;
+		offsetY = y - e.clientY;
 		down = true;
 	}
 
