@@ -23,8 +23,8 @@
 
 	$effect(() => {
 		if (down) {
-			x = pos.X + offsetX;
-			y = pos.Y + offsetY;
+			x = pos.x + offsetX;
+			y = pos.y + offsetY;
 		}
 	});
 
@@ -55,4 +55,4 @@
 	{@render children()}
 </div>
 
-<svelte:window {onmousemove} {onmouseup} />
+<svelte:window {onmouseup} />

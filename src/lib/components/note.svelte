@@ -20,31 +20,31 @@
 	const DELTA_ANGLE = 5;
 	let angle = $state(0);
 
-	function onmousemove(e: MouseEvent) {
+	$effect(() => {
 		if (!down) {
 			return;
 		}
 		const now = performance.now();
 
 		if (!prev) {
-			prev = {x: e.clientX, t: now};
+			prev = {x: pos.x, t: now};
 			return;
 		}
 
 		const dt = now - prev.t;
 
 		if (dt > 5) {
-			velX = (e.clientX - prev.x) / dt
+			velX = (pos.x - prev.x) / dt
 			smoothVelX = (0.8 * smoothVelX) + (0.2 * velX);
 			angle = smoothVelX * DELTA_ANGLE;
 		}
 
-		prev = { x: e.clientX, t: now };
-    }
+		prev = { x: pos.x, t: now };
+	});
 
 </script>
 	<Draggable bind:pos bind:down bind:doubleclick>
-		<div {onmousemove} role="navigation"   style="transform: rotate({angle}deg)"   class="relative w-48 h-48 bg-[url(/src/lib/assets/stickynote.png)]">
+		<div role="navigation"   style="transform: rotate({angle}deg)"   class="relative w-48 h-48 bg-[url(/src/lib/assets/stickynote.png)]">
 			{#if !doubleclick}
 				<p class="absolute inset-3 overflow-hidden whitespace-pre-wrap break-words resize-none">{text}</p>
 			{:else}
