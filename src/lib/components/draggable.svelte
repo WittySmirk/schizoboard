@@ -7,6 +7,7 @@
 		down = $bindable(false),
 		doubleclick = $bindable(false),
 		pos = $bindable({ x: 0, y: 0 }),
+		zoom = $bindable(1),
 	} = $props<{
 		initialX?: number;
 		initialY?: number;
@@ -14,6 +15,7 @@
 		down?: boolean;
 		doubleclick?: boolean;
 		pos: { x: number; y: number };
+		zoom: number;
 	}>();
 	let x: number = $state(initialX);
 	let y: number = $state(initialY);
@@ -23,14 +25,17 @@
 
 	$effect(() => {
 		if (down) {
-			x = pos.x + offsetX;
-			y = pos.y + offsetY;
-		}
+		const mouseX = pos.x / zoom;
+		const mouseY = pos.y / zoom;
+
+		x = mouseX + offsetX;
+		y = mouseY + offsetY;
+	}
 	});
 
 	function onmousedown(e: MouseEvent) {
-		offsetX = x - e.clientX;
-		offsetY = y - e.clientY;
+		offsetX = x - (e.clientX / zoom);
+		offsetY = y - (e.clientY / zoom);
 		down = true;
 	}
 
