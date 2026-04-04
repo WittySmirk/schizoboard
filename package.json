@@ -26,5 +26,10 @@
 		"tailwindcss": "^4.1.18",
 		"typescript": "^5.9.3",
 		"vite": "^7.3.1"
+	},
+	"dependencies": {
+		"@lucide/svelte": "^1.7.0",
+		"pdfjs-dist": "^5.6.205",
+		"svelte-pdf-view": "^0.3.3"
 	}
 }

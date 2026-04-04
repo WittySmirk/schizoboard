@@ -2,15 +2,23 @@
 	import Draggable from "$lib/components/draggable.svelte";
 	import Picture from "$lib/components/picture.svelte";
 	import Note from "$lib/components/note.svelte";
+	import Document from "$lib/components/document.svelte";
 
+	// TODO:  make one array with different types embedded
 	let pictures: string[] = $state([]);
+	let documents: string[] = $state([]);
 	let pos: { x: number; y: number } = $state({ x: 0, y: 0 });
 
 	function parseFiles(files: FileList) {
 		[...files].map((file) => {
+			console.log(file.type);
 			if (file.type.includes("image")) {
 				const src = URL.createObjectURL(file);
 				pictures.push(src);
+			}
+			if (file.type.includes("pdf")) {
+				const src = URL.createObjectURL(file);
+				documents.push(src);
 			}
 		});
 	}
@@ -58,6 +66,12 @@
 	{/if}
 
 	<Note bind:pos></Note>
+
+	{#if documents.length != 0}
+		{#each documents as document}
+			<Document bind:pos type="pdf" src={document}></Document>
+		{/each}
+	{/if}
 
 	<!-- TODO: add styling to upload button -->
 	<input type="file" id="upload" {onchange} hidden />
