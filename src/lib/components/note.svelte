@@ -46,9 +46,9 @@
 	<Draggable bind:pos bind:down bind:doubleclick>
 		<div role="navigation"   style="transform: rotate({angle}deg)"   class="relative w-48 h-48 bg-[url(/src/lib/assets/stickynote.png)]">
 			{#if !doubleclick}
-				<p class="absolute inset-3 overflow-hidden whitespace-pre-wrap break-words resize-none">{text}</p>
+				<p class="absolute inset-3 overflow-hidden whitespace-pre-wrap wrap-break-word resize-none">{text}</p>
 			{:else}
-				<textarea class="absolute inset-3 overflow-hidden whitespace-pre-wrap break-words resize-none"
+				<textarea class="absolute inset-3 overflow-hidden whitespace-pre-wrap wrap-break-word resize-none"
 					bind:value={text}  
 					autofocus 
 					{onblur}>
