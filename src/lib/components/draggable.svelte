@@ -14,7 +14,8 @@
 
 	let down: boolean = false;
 
-	function onmousemove(e) {
+	function onmousemove(e: MouseEvent) {
+		e.preventDefault();
 		if (down) {
 			x = e.clientX;
 			y = e.clientY;
@@ -28,7 +29,7 @@
 	}
 </script>
 
-<div {onmousedown} class="absolute bg-blue-500" style:top="{y}px" style:left="{x}px">
+<div {onmousedown} class="absolute" style:top="{y}px" style:left="{x}px">
 	{@render children()}
 </div>
 
