@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Draggable from '$lib/components/draggable.svelte';
 	import Picture from '$lib/components/picture.svelte';
+	import Note from '$lib/components/note.svelte';
 
 	let pictures: string[] = $state([]);
 
@@ -48,6 +49,8 @@
 			<Picture src={picture}></Picture>
 		{/each}
 	{/if}
+
+	<Note></Note>
 
 	<!-- TODO: add styling to upload button -->
 	<input type="file" id="upload" {onchange} hidden />

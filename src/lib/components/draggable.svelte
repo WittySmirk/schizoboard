@@ -3,16 +3,18 @@
 	let {
 		initialX = 0,
 		initialY = 0,
-		children
+		children,
+		down = $bindable(false),
+		doubleclick = $bindable(false)
 	} = $props<{
 		initialX?: number;
 		initialY?: number;
 		children: Snippet;
+		down?: boolean;
+		doubleclick?: boolean;
 	}>();
 	let x: number = $state(initialX);
 	let y: number = $state(initialY);
-
-	let down: boolean = false;
 
 	function onmousemove(e: MouseEvent) {
 		e.preventDefault();
@@ -24,12 +26,18 @@
 	function onmousedown() {
 		down = true;
 	}
+
 	function onmouseup() {
 		down = false;
 	}
+
+	function ondblclick () {
+		doubleclick = true;
+		
+	}
 </script>
 
-<div {onmousedown} class="absolute" style:top="{y}px" style:left="{x}px" role="group">
+<div {onmousedown} {ondblclick} class="absolute" style:top="{y}px" style:left="{x}px">
 	{@render children()}
 </div>
 
