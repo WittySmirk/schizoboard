@@ -4,11 +4,13 @@
 	let {
 		pos = $bindable({ x: 0, y: 0 }),
 		index,
+		zoom = $bindable(1),
 		focused = $bindable()
 	} = $props<{
 		pos: { x: number; y: number };
 		index: number;
 		focused: number | undefined;
+		zoom: number;
 	}>();
 	let text = $state('Test');
 
@@ -48,26 +50,17 @@
 		prev = { x: pos.x, t: now };
 	});
 </script>
-
-<Draggable bind:pos bind:down bind:doubleclick bind:focused {index}>
-	<div
-		role="navigation"
-		style="transform: rotate({angle}deg)"
-		class="relative h-48 w-48 bg-[url(/src/lib/assets/stickynote.png)]"
-	>
-		{#if !doubleclick}
-			<p class="absolute inset-3 resize-none overflow-hidden break-words whitespace-pre-wrap">
-				{text}
-			</p>
-		{:else}
-			<textarea
-				class="absolute inset-3 resize-none overflow-hidden break-words whitespace-pre-wrap"
-				bind:value={text}
-				autofocus
-				{onblur}
-			>
-			</textarea>
-			<p></p>
-		{/if}
-	</div>
-</Draggable>
+	<Draggable bind:pos bind:down bind:doubleclick bind:zoom bind:focused {index}>
+		<div role="navigation"   style="transform: rotate({angle}deg)"   class="relative w-48 h-48 bg-[url(/src/lib/assets/stickynote.png)]">
+			{#if !doubleclick}
+				<p class="absolute inset-3 overflow-hidden whitespace-pre-wrap wrap-break-word resize-none">{text}</p>
+			{:else}
+				<textarea class="absolute inset-3 overflow-hidden whitespace-pre-wrap wrap-break-word resize-none"
+					bind:value={text}  
+					autofocus 
+					{onblur}>
+				</textarea>
+				<p></p>
+			{/if}
+		</div>
+	</Draggable>

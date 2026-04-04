@@ -11,6 +11,13 @@
 	let pos: { x: number; y: number } = $state({ x: 0, y: 0 });
 	let focused: number | undefined = $state();
 
+	let zoom = $state(1);
+	const ZOOM_FACTOR = 0.1
+	let scrollVal = $state(0);
+	let isPanning = false;
+	let lastPan = $state({x: 0, y: 0});
+	let offset = $state({x: 0, y: 0});
+
 	function parseFiles(files: FileList) {
 		[...files].map((file) => {
 			console.log(file.type);
@@ -50,7 +57,32 @@
 
 	function onmousemove(e: MouseEvent) {
 		e.preventDefault();
-		pos = { x: e.clientX, y: e.clientY };
+		pos = {x: e.clientX, y: e.clientY};
+
+		if (!isPanning) return;
+
+		const dx = pos.x - lastPan.x;
+		const dy = pos.y - lastPan.y;
+
+		offset.x += dx;
+		offset.y += dy;
+
+		lastPan = {x: e.clientX, y: e.clientY};
+		console.log(offset.x);
+		console.log(offset.y);
+	}
+
+	function onwheel(e: WheelEvent) {
+		zoom += e.deltaY > 0 ? -ZOOM_FACTOR : ZOOM_FACTOR;
+	}
+
+	function onmousedown(e: MouseEvent) {
+		isPanning = true;
+		lastPan = {x: e.clientX, y: e.clientY};
+	}
+
+	function onmouseup() {
+		isPanning = false;
 	}
 
 	function onkeydown(e: KeyboardEvent) {
@@ -66,14 +98,23 @@
 	<title>schizoboard</title>
 </head>
 
-<div class="absolute h-full w-full" {ondragover} {ondrop} {onclick} role="main">
+<svelte:window {onwheel} bind:scrollY={scrollVal} {onmousemove} />
+
+<div class="fixed inset-0" style="transform: translate({offset.x}px, {offset.y}px) scale({zoom})">
+	<canvas class="fixed h-full w-full bg-[url(/src/lib/assets/corkboard.jpg)] bg-size-[200px] bg-repeat inset-shadow-[0_0_200px_rgba(0,0,0,0.9)] -z-9999 brightness-95 " 
+			style="transform: scale({1/zoom}) translate({-offset.x}px, {-offset.y}px);
+					background-size: {50 * zoom}%;
+					background-position: {offset.x}px {offset.y}px;"   
+			{ondragover} {ondrop} {onmousedown} {onmouseup} {onclick}>
+	</canvas>
+
 	{#each entities as entity, i}
 		{#if entity.type == 'picture'}
-			<Picture bind:focused bind:pos src={entity.src} dragged={true} index={i} />
+			<Picture bind:focused bind:pos bind:zoom src={entity.src} dragged={true} index={i} />
 		{:else if entity.type == 'note'}
-			<Note bind:focused bind:pos index={i} />
+			<Note bind:focused bind:pos bind:zoom index={i} />
 		{:else if entity.type == 'document'}
-			<Document bind:focused bind:pos type="pdf" src={entity.src!} index={i} dragged={true} />
+			<Document bind:focused bind:pos bind:zoom type="pdf" src={entity.src!} index={i} dragged={true} />
 		{/if}
 	{/each}
 
@@ -81,5 +122,3 @@
 	<input type="file" id="upload" {onchange} hidden />
 	<label for="upload">Upload File</label>
 </div>
-
-<svelte:window {onkeydown} {onmousemove} />

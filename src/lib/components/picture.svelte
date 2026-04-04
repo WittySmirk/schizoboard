@@ -6,18 +6,21 @@
 		pos = $bindable({ x: 0, y: 0 }),
 		dragged = false,
 		index,
-		focused = $bindable()
+		focused = $bindable(),
+		zoom = $bindable(1)
 	} = $props<{
 		src?: string;
 		pos: { x: number; y: number };
 		dragged?: boolean;
 		index: number;
 		focused: number | undefined;
+		zoom: number;
 	}>();
 </script>
 
 <Draggable
 	bind:pos
+	bind:zoom
 	initialX={dragged ? pos.x : 0}
 	initialY={dragged ? pos.y : 0}
 	bind:focused

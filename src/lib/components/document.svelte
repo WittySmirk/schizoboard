@@ -8,7 +8,8 @@
 		src,
 		index,
 		dragged = false,
-		focused = $bindable()
+		focused = $bindable(),
+		zoom = $bindable(1),
 	} = $props<{
 		pos: { x: number; y: number };
 		type: 'pdf' | 'md';
@@ -16,6 +17,7 @@
 		index: number;
 		dragged: boolean;
 		focused: number | undefined;
+		zoom: number;
 	}>();
 
 	let down = $state(false);
@@ -25,6 +27,7 @@
 	bind:focused
 	bind:pos
 	bind:down
+	bind:zoom
 	{index}
 	initialX={dragged ? pos.x : 0}
 	initialY={dragged ? pos.y : 0}
