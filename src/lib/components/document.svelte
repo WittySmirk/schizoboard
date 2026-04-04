@@ -16,6 +16,6 @@
 
 <Draggable bind:pos bind:down>
 	<PdfViewer {src}>
-		<PdfRenderer />
+		<PdfRenderer backgroundColor="#e8e8e8" />
 	</PdfViewer>
 </Draggable>

@@ -24,6 +24,7 @@
 			y = pos.y;
 		}
 	});
+
 	function onmousedown() {
 		down = true;
 	}
@@ -41,9 +42,11 @@
 	{onmousedown}
 	{ondblclick}
 	class="absolute"
-	style:top="{y}px"
-	style:left="{x}px"
+	style="transform: translate({x}px, {y}px); will-change: transform; isolation: isolate;"
 >
+	{#if down}
+		<div class="absolute inset-0 z-10" />
+	{/if}
 	{@render children()}
 </div>
 
