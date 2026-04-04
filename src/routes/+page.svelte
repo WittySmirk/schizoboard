@@ -28,6 +28,7 @@
 	function ondrop(e: DragEvent) {
 		e.preventDefault();
 		if (e.dataTransfer != null && e.dataTransfer.files) {
+			pos = { x: e.x, y: e.y };
 			const files = e.dataTransfer.files;
 			parseFiles(files);
 		}
@@ -52,7 +53,7 @@
 
 	{#if pictures.length != 0}
 		{#each pictures as picture}
-			<Picture bind:pos src={picture}></Picture>
+			<Picture bind:pos src={picture} dragged={true}></Picture>
 		{/each}
 	{/if}
 
