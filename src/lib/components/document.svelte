@@ -5,17 +5,21 @@
 	let {
 		pos = $bindable({ x: 0, y: 0 }),
 		type,
-		src
+		src,
+		index,
+		focused = $bindable()
 	} = $props<{
 		pos: { x: number; y: number };
 		type: 'pdf' | 'md';
 		src: string;
+		index: number;
+		focused: number | undefined;
 	}>();
 
 	let down = $state(false);
 </script>
 
-<Draggable bind:pos bind:down>
+<Draggable bind:focused bind:pos bind:down {index}>
 	<div class="h-205">
 		<PdfViewer {src}>
 			<PdfRenderer backgroundColor="#FFFFFF" />

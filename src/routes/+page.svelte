@@ -1,24 +1,25 @@
 <script lang="ts">
-	import Draggable from "$lib/components/draggable.svelte";
-	import Picture from "$lib/components/picture.svelte";
-	import Note from "$lib/components/note.svelte";
-	import Document from "$lib/components/document.svelte";
+	import Draggable from '$lib/components/draggable.svelte';
+	import Picture from '$lib/components/picture.svelte';
+	import Note from '$lib/components/note.svelte';
+	import Document from '$lib/components/document.svelte';
 
-	// TODO:  make one array with different types embedded
-	let pictures: string[] = $state([]);
-	let documents: string[] = $state([]);
+	type entity = { type: 'note' | 'picture' | 'document'; src?: string };
+
+	let entities: entity[] = $state([{ type: 'note' }]);
 	let pos: { x: number; y: number } = $state({ x: 0, y: 0 });
+	let focused: number | undefined = $state();
 
 	function parseFiles(files: FileList) {
 		[...files].map((file) => {
 			console.log(file.type);
-			if (file.type.includes("image")) {
+			if (file.type.includes('image')) {
 				const src = URL.createObjectURL(file);
-				pictures.push(src);
+				entities.push({ type: 'picture', src });
 			}
-			if (file.type.includes("pdf")) {
+			if (file.type.includes('pdf')) {
 				const src = URL.createObjectURL(file);
-				documents.push(src);
+				entities.push({ type: 'document', src });
 			}
 		});
 	}
@@ -42,9 +43,21 @@
 		}
 	}
 
+	function onclick(e: MouseEvent) {
+		focused = undefined;
+	}
+
 	function onmousemove(e: MouseEvent) {
 		e.preventDefault();
 		pos = { x: e.clientX, y: e.clientY };
+	}
+
+	function onkeydown(e: KeyboardEvent) {
+		if (focused && e.key == 'Backspace') {
+			console.log('removing at ', focused);
+			entities.splice(focused, 1);
+			entities = entities;
+		}
 	}
 </script>
 
@@ -52,30 +65,20 @@
 	<title>schizoboard</title>
 </head>
 
-<div class="absolute h-full w-full" {ondragover} {ondrop} role="main">
-	<Draggable bind:pos>
-		<h1>Hello diddy</h1>
-	</Draggable>
-
-	<Picture bind:pos></Picture>
-
-	{#if pictures.length != 0}
-		{#each pictures as picture}
-			<Picture bind:pos src={picture} dragged={true}></Picture>
-		{/each}
-	{/if}
-
-	<Note bind:pos></Note>
-
-	{#if documents.length != 0}
-		{#each documents as document}
-			<Document bind:pos type="pdf" src={document}></Document>
-		{/each}
-	{/if}
+<div class="absolute h-full w-full" {ondragover} {ondrop} {onclick} role="main">
+	{#each entities as entity, i}
+		{#if entity.type == 'picture'}
+			<Picture bind:focused bind:pos src={entity.src} dragged={true} index={i} />
+		{:else if entity.type == 'note'}
+			<Note bind:focused bind:pos index={i} />
+		{:else if entity.type == 'document'}
+			<Document bind:focused bind:pos type="pdf" src={entity.src!} index={i} />
+		{/if}
+	{/each}
 
 	<!-- TODO: add styling to upload button -->
 	<input type="file" id="upload" {onchange} hidden />
 	<label for="upload">Upload File</label>
 </div>
 
-<svelte:window {onmousemove} />
+<svelte:window {onkeydown} {onmousemove} />
