@@ -39,8 +39,8 @@
 	});
 
 	function onmousedown(e: MouseEvent) {
-		offsetX = x - (e.clientX / zoom);
-		offsetY = y - (e.clientY / zoom);
+		offsetX = x - e.clientX / zoom;
+		offsetY = y - e.clientY / zoom;
 		down = true;
 	}
 
@@ -55,6 +55,7 @@
 	function onclick(e: MouseEvent) {
 		e.stopPropagation();
 		focused = index;
+		//console.log(focused);
 	}
 </script>
 

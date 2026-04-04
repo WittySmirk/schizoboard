@@ -12,11 +12,11 @@
 	let focused: number | undefined = $state();
 
 	let zoom = $state(1);
-	const ZOOM_FACTOR = 0.1
+	const ZOOM_FACTOR = 0.1;
 	let scrollVal = $state(0);
 	let isPanning = false;
-	let lastPan = $state({x: 0, y: 0});
-	let offset = $state({x: 0, y: 0});
+	let lastPan = $state({ x: 0, y: 0 });
+	let offset = $state({ x: 0, y: 0 });
 
 	function parseFiles(files: FileList) {
 		[...files].map((file) => {
@@ -57,7 +57,7 @@
 
 	function onmousemove(e: MouseEvent) {
 		e.preventDefault();
-		pos = {x: e.clientX, y: e.clientY};
+		pos = { x: e.clientX, y: e.clientY };
 
 		if (!isPanning) return;
 
@@ -67,9 +67,11 @@
 		offset.x += dx;
 		offset.y += dy;
 
-		lastPan = {x: e.clientX, y: e.clientY};
+		lastPan = { x: e.clientX, y: e.clientY };
+		/*
 		console.log(offset.x);
 		console.log(offset.y);
+		*/
 	}
 
 	function onwheel(e: WheelEvent) {
@@ -78,7 +80,7 @@
 
 	function onmousedown(e: MouseEvent) {
 		isPanning = true;
-		lastPan = {x: e.clientX, y: e.clientY};
+		lastPan = { x: e.clientX, y: e.clientY };
 	}
 
 	function onmouseup() {
@@ -86,6 +88,7 @@
 	}
 
 	function onkeydown(e: KeyboardEvent) {
+		console.log('here', focused);
 		if (focused != undefined && e.key == 'Backspace') {
 			console.log('removing at ', focused);
 			entities.splice(focused, 1);
@@ -98,14 +101,20 @@
 	<title>schizoboard</title>
 </head>
 
-<svelte:window {onwheel} bind:scrollY={scrollVal} {onmousemove} />
+<svelte:window {onwheel} bind:scrollY={scrollVal} {onmousemove} {onkeydown} />
 
 <div class="fixed inset-0" style="transform: translate({offset.x}px, {offset.y}px) scale({zoom})">
-	<canvas class="fixed h-full w-full bg-[url(/src/lib/assets/corkboard.jpg)] bg-size-[200px] bg-repeat inset-shadow-[0_0_200px_rgba(0,0,0,0.9)] -z-9999 brightness-95 " 
-			style="transform: scale({1/zoom}) translate({-offset.x}px, {-offset.y}px);
+	<canvas
+		class="fixed -z-9999 h-full w-full bg-[url(/src/lib/assets/corkboard.jpg)] bg-size-[200px] bg-repeat inset-shadow-[0_0_200px_rgba(0,0,0,0.9)] brightness-95"
+		style="transform: scale({1 / zoom}) translate({-offset.x}px, {-offset.y}px);
 					background-size: {50 * zoom}%;
-					background-position: {offset.x}px {offset.y}px;"   
-			{ondragover} {ondrop} {onmousedown} {onmouseup} {onclick}>
+					background-position: {offset.x}px {offset.y}px;"
+		{ondragover}
+		{ondrop}
+		{onmousedown}
+		{onmouseup}
+		{onclick}
+	>
 	</canvas>
 
 	{#each entities as entity, i}
@@ -114,7 +123,15 @@
 		{:else if entity.type == 'note'}
 			<Note bind:focused bind:pos bind:zoom index={i} />
 		{:else if entity.type == 'document'}
-			<Document bind:focused bind:pos bind:zoom type="pdf" src={entity.src!} index={i} dragged={true} />
+			<Document
+				bind:focused
+				bind:pos
+				bind:zoom
+				type="pdf"
+				src={entity.src!}
+				index={i}
+				dragged={true}
+			/>
 		{/if}
 	{/each}
 
@@ -122,3 +139,4 @@
 	<input type="file" id="upload" {onchange} hidden />
 	<label for="upload">Upload File</label>
 </div>
+
