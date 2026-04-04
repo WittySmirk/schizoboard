@@ -6,6 +6,7 @@
 
 	type entity = { type: 'note' | 'picture' | 'document'; src?: string };
 
+	// TODO: add actual drag checking
 	let entities: entity[] = $state([{ type: 'note' }]);
 	let pos: { x: number; y: number } = $state({ x: 0, y: 0 });
 	let focused: number | undefined = $state();
@@ -72,7 +73,7 @@
 		{:else if entity.type == 'note'}
 			<Note bind:focused bind:pos index={i} />
 		{:else if entity.type == 'document'}
-			<Document bind:focused bind:pos type="pdf" src={entity.src!} index={i} />
+			<Document bind:focused bind:pos type="pdf" src={entity.src!} index={i} dragged={true} />
 		{/if}
 	{/each}
 
