@@ -292,3 +292,10 @@
 		</g>
 	</svg>
 {/each}
+{#each pinpos as pin}
+	<img
+		src="/src/lib/assets/pushpin-down.png"
+		class="background-red-400 fixed z-[999] mx-auto h-10 w-10 cursor-pointer select-none"
+		style="transform: translate({pin.x}px, {pin.y}px);"
+	/>
+{/each}
