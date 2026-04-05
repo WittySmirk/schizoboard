@@ -9,7 +9,7 @@
 		focused = $bindable(),
 		createconn,
 		pinPos = $bindable(),
-		zCounter = $bindable(),
+		zCounter = $bindable()
 	} = $props<{
 		initialPos: { x: number; y: number };
 		pos: { x: number; y: number };
@@ -57,6 +57,12 @@
 
 		prev = { x: pos.x, t: now };
 	});
+
+	$effect(() => {
+		if (doubleclick) {
+			focused = undefined;
+		}
+	});
 </script>
 
 <Draggable
@@ -76,17 +82,17 @@
 	<div
 		role="navigation"
 		style="transform: rotate({angle}deg)"
-		class="pointer-events-none h-full w-full bg-[url(/src/lib/assets/stickynote.png)] drop-shadow-[19px_10px_21px_rgba(0,0,0,0.2)] bg-cover select-none"
+		class="pointer-events-none h-full w-full bg-[url(/src/lib/assets/stickynote.png)] bg-cover drop-shadow-[19px_10px_21px_rgba(0,0,0,0.2)] select-none"
 	>
 		{#if !doubleclick}
 			<p
-				class="absolute inset-5 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap select-none text-3xl"
+				class="absolute inset-5 resize-none overflow-hidden text-3xl wrap-break-word whitespace-pre-wrap select-none"
 			>
 				{text}
 			</p>
 		{:else}
 			<textarea
-				class="absolute inset-5 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap text-3xl"
+				class="absolute inset-5 resize-none overflow-hidden text-3xl wrap-break-word whitespace-pre-wrap"
 				bind:value={text}
 				autofocus
 				{onblur}

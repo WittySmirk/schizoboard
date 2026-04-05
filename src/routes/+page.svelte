@@ -139,6 +139,7 @@
 	}
 
 	function onwheel(e: WheelEvent) {
+		e.preventDefault();
 		let prevZoom = zoom;
 		let newZoom = zoom + (e.deltaY > 0 ? -ZOOM_FACTOR : ZOOM_FACTOR);
 
