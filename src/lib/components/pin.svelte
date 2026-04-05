@@ -12,6 +12,7 @@
 	}>();
 
 	let pin: HTMLElement;
+
 	$effect(() => {
 		const _ = { pos, zoom };
 		const rect = pin.getBoundingClientRect();
@@ -19,4 +20,10 @@
 	});
 </script>
 
-<div bind:this={pin} {onclick} class="absolute -top-5 left-1/2 h-10 w-10">a</div>
+<div
+	bind:this={pin}
+	{onclick}
+	class="absolute top-0 left-1/2 h-10 w-10 opacity-0 hover:cursor-pointer"
+>
+	a
+</div>

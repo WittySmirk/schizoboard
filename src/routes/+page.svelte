@@ -246,19 +246,22 @@
 {#each connections as connection}
 	{@const p1 = pinpos[connection.i1]}
 	{@const p2 = pinpos[connection.i2]}
-	{@const dx = p2.x - p1.x}
-	{@const dy = p2.y - p1.y}
+	{@const PIN_X_OFFSET = -20}
+	{@const PIN_Y_OFFSET = -15}
+	{@const cx1 = p1.x + PIN_X_OFFSET}
+	{@const cy1 = p1.y + PIN_Y_OFFSET}
+	{@const cx2 = p2.x + PIN_X_OFFSET}
+	{@const cy2 = p2.y + PIN_Y_OFFSET}
+	{@const dx = cx2 - cx1}
+	{@const dy = cy2 - cy1}
 	{@const len = Math.sqrt(dx * dx + dy * dy)}
 	{@const angle = (Math.atan2(dy, dx) * 180) / Math.PI}
-	{@const patternH = Math.ceil(25 * zoom)}
-	{@const patternY = -Math.floor(patternH)}
+	{@const patternH = Math.min(Math.ceil(25 * zoom), 18)}
+	{@const patternY = -Math.floor(patternH / 2)}
 	{@const patternW = Math.ceil(200 * zoom)}
 
 	<svg style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;">
 		<defs>
-			<clipPath id="clip-{connection.i1}-{connection.i2}">
-				<rect x="0" y={patternY} width={len} height={patternH} />
-			</clipPath>
 			<pattern
 				id="string-{connection.i1}-{connection.i2}"
 				patternUnits="userSpaceOnUse"
@@ -277,8 +280,7 @@
 				/>
 			</pattern>
 		</defs>
-
-		<g transform="translate({p1.x}, {p1.y}) rotate({angle})">
+		<g transform="translate({cx1}, {cy1}) rotate({angle})">
 			<rect
 				x="0"
 				y={patternY}
@@ -289,11 +291,13 @@
 		</g>
 	</svg>
 {/each}
+
 {#each pinpos as pin}
 	<img
 		src="/src/lib/assets/pushpin-down.png"
-		class="background-red-400 fixed z-999 mx-auto h-10 w-10 cursor-pointer select-none drop-shadow-[19px_6px_12px_rgba(0,0,0,0.4)]"
-		style="transform: translate({pin.x}px, {pin.y}px);"
+		class="background-red-400 fixed z-999 mx-auto cursor-pointer drop-shadow-[19px_6px_12px_rgba(0,0,0,0.4)] select-none"
+		style="transform: translate({pin.x - 35 * zoom}px, {pin.y - 30 * zoom}px); width: {40 *
+			zoom}px; height: {40 * zoom}px;"
 	/>
 {/each}
 
