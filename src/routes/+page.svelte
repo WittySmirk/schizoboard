@@ -12,8 +12,11 @@
 	import Document from '$lib/components/document.svelte';
 	import Toolbar from '$lib/components/toolbar.svelte';
 
-	// TODO: add actual drag checking
 	let entities: entity[] = $state([{ type: 'note', initial: { x: 0, y: 0 } }]);
+	let connections: { pos1: { x: number; y: number }; pos2: { x: number; y: number } }[] = $state([
+		{ pos1: { x: 100, y: 100 }, pos2: { x: 200, y: 200 } }
+	]);
+
 	let pos: { x: number; y: number } = $state({ x: 0, y: 0 });
 	let focused: number | undefined = $state();
 
@@ -133,7 +136,6 @@
 
 		offset.x = e.clientX - (e.clientX - offset.x) * (zoom / prevZoom);
 		offset.y = e.clientY - (e.clientY - offset.y) * (zoom / prevZoom);
-		
 	}
 
 	function onmousedown(e: MouseEvent) {
@@ -162,11 +164,11 @@
 <svelte:window {onwheel} bind:scrollY={scrollVal} {onmousemove} {onkeydown} />
 
 <div
-	class="fixed inset-0 "
+	class="fixed inset-0"
 	style="transform-origin: 0 0; transform: translate({offset.x}px, {offset.y}px) scale({zoom})"
 >
 	<canvas
-		class="fixed -z-9999 h-full w-full bg-[url(/src/lib/assets/corkboard.jpg)] bg-size-[200px] bg-repeat inset-shadow-[0_0_200px_rgba(0,0,0,0.9)] brightness-95 overflow-hidden"
+		class="fixed -z-9999 h-full w-full overflow-hidden bg-[url(/src/lib/assets/corkboard.jpg)] bg-size-[200px] bg-repeat inset-shadow-[0_0_200px_rgba(0,0,0,0.9)] brightness-95"
 		style="transform-origin: 0 0; transform: scale({1 /
 			zoom}) translate({-offset.x}px, {-offset.y}px);
 					background-size: {50 * zoom}%;
@@ -205,12 +207,20 @@
 			/>
 		{/if}
 	{/each}
-
-	<!-- TODO: add styling to upload button -->
-	<!--
-	<input type="file" id="upload" {onchange} hidden />
-	<label for="upload">Upload File</label>
-	-->
 </div>
 
 <Toolbar bind:create />
+
+{#each connections as connection}
+	<svg class="pointer-events-none fixed inset-0 top-0 left-0 z-[999] h-full w-full">
+		<line
+			x1={connection.pos1.x - Math.min(connection.pos1.x, connection.pos2.x)}
+			y1={connection.pos1.y - Math.min(connection.pos1.y, connection.pos2.y)}
+			x2={connection.pos2.x - Math.min(connection.pos1.x, connection.pos2.x)}
+			y2={connection.pos2.y - Math.min(connection.pos1.y, connection.pos2.y)}
+			stroke="red"
+			stroke-width={5}
+		/>
+		<line x1={0} y1={0} x2={pos.x} y2={pos.y} stroke="red" stroke-width={5} />
+	</svg>
+{/each}
