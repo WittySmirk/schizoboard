@@ -11,7 +11,8 @@
 		focused = $bindable(),
 		zoom = $bindable(1),
 		createconn,
-		pinPos = $bindable()
+		pinPos = $bindable(),
+		zCounter = $bindable()
 	} = $props<{
 		initialPos?: { x: number; y: number };
 		pos: { x: number; y: number };
@@ -23,9 +24,39 @@
 		zoom: number;
 		createconn: (index: number) => void;
 		pinPos: { x: number; y: number };
+		zCounter: number;
 	}>();
 
 	let down = $state(false);
+
+	let velX = 0;
+	let smoothVelX = 0;
+	let prev = { x: 0, t: performance.now() };
+
+	const DELTA_ANGLE = 4;
+	let angle = $state(0);
+
+	$effect(() => {
+		if (!down) {
+			return;
+		}
+		const now = performance.now();
+
+		if (!prev) {
+			prev = { x: pos.x, t: now };
+			return;
+		}
+
+		const dt = now - prev.t;
+
+		if (dt > 5) {
+			velX = (pos.x - prev.x) / dt;
+			smoothVelX = 0.8 * smoothVelX + 0.2 * velX;
+			angle = smoothVelX * DELTA_ANGLE;
+		}
+
+		prev = { x: pos.x, t: now };
+	});
 </script>
 
 <Draggable
@@ -34,12 +65,13 @@
 	bind:down
 	bind:zoom
 	bind:pinPos
+	bind:zCounter
 	{createconn}
 	{index}
 	initialPos={{ x: drop ? drop.x : initialPos.x, y: drop ? drop.y : initialPos.y, w: 650, h: 875 }}
 	type="document"
 >
-	<div class="h-full select-none">
+	<div class="h-full select-none"   style="transform: rotate({angle}deg)">
 		<PdfViewer {src}>
 			<PdfRenderer backgroundColor="#FFFFFF" />
 		</PdfViewer>
