@@ -160,7 +160,7 @@
 
 	function onkeydown(e: KeyboardEvent) {
 		console.log('here', focused);
-		if (e.key == 'Backspace') {
+		if (e.key == 'Delete') {
 			if (focused != undefined && selectedYarn == undefined) {
 				console.log('removing at ', focused);
 				entities.splice(focused, 1);
