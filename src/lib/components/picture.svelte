@@ -91,8 +91,13 @@
 		type="picture"
 		{aspectRatio}
 	>
-		<div class="h-full w-full bg-[#ffffed] brightness-95 p-2 overflow-hidden drop-shadow-[19px_10px_21px_rgba(0,0,0,0.3)] select-none" style="transform: rotate({angle}deg)">
-			<img class="w-full h-7/8 object-cover select-none brightness-95" {src}/> 
+		<div class="h-full w-full bg-[#ffffed] brightness-95 p-6 pb-20 overflow-hidden drop-shadow-[19px_10px_21px_rgba(0,0,0,0.3)] select-none" style="transform: rotate({angle}deg)">
+			<div class="relative inline block">
+				<img class="w-full h-full object-cover select-none brightness-95 saturate-80" {src}/>
+				
+				<div class="pointer-events-none absolute inset-0 opacity-80 bg-cover mix-blend-overlay bg-[url('/images/film-grain.jpg')]"></div>
+				<div class="pointer-events-none absolute inset-0 opacity-30 bg-cover mix-blend-overlay bg-[url('/images/polaroid.png')]"></div>
+			</div>
 		</div>
 		<!-- <img class="h-full w-full object-cover select-none drop-shadow-[19px_10px_21px_rgba(0,0,0,0.2)]" style="transform: rotate({angle}deg)" {src} /> -->
 	</Draggable>

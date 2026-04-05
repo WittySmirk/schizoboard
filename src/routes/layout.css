@@ -4,3 +4,12 @@ img {
 	-webkit-user-drag: none;
 	pointer-events: none;
 }
+
+@font-face {
+  font-family: myFont;
+  src: url(/fonts/handwriting.ttf);
+}
+
+* {
+	font-family: myFont;
+}

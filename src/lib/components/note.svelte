@@ -80,7 +80,7 @@
 	>
 		{#if !doubleclick}
 			<p
-				class="absolute inset-3 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap select-none"
+				class="absolute inset-3 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap select-none text-2xl"
 			>
 				{text}
 			</p>
