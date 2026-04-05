@@ -6,13 +6,15 @@
 		pos = $bindable({ x: 0, y: 0 }),
 		index,
 		zoom = $bindable(1),
-		focused = $bindable()
+		focused = $bindable(),
+		createconn
 	} = $props<{
 		initialPos: { x: number; y: number };
 		pos: { x: number; y: number };
 		index: number;
 		focused: number | undefined;
 		zoom: number;
+		createconn: (pos: { x: number; y: number }) => void;
 	}>();
 	let text = $state('Test');
 
@@ -54,6 +56,7 @@
 </script>
 
 <Draggable
+	{createconn}
 	initialPos={{ x: initialPos.x, y: initialPos.y, w: 200, h: 200 }}
 	bind:pos
 	bind:down
@@ -67,10 +70,12 @@
 	<div
 		role="navigation"
 		style="transform: rotate({angle}deg)"
-		class="h-full w-full bg-[url(/src/lib/assets/stickynote.png)] bg-cover select-none"
+		class="pointer-events-none h-full w-full bg-[url(/src/lib/assets/stickynote.png)] bg-cover select-none"
 	>
 		{#if !doubleclick}
-			<p class="absolute inset-3 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap select-none">
+			<p
+				class="absolute inset-3 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap select-none"
+			>
 				{text}
 			</p>
 		{:else}

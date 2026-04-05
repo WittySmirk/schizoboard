@@ -8,7 +8,8 @@
 		index,
 		drop,
 		focused = $bindable(),
-		zoom = $bindable(1)
+		zoom = $bindable(1),
+		createconn
 	} = $props<{
 		initialPos?: { x: number; y: number };
 		src?: string;
@@ -17,6 +18,7 @@
 		index: number;
 		focused: number | undefined;
 		zoom: number;
+		createconn: (pos: { x: number; y: number }) => void;
 	}>();
 
 	let aspectRatio: number = $state(0);
@@ -31,10 +33,13 @@
 	}
 </script>
 
-<img {src} onload={onimageload} class="hidden" />
+{#if !loaded}
+	<img {src} onload={onimageload} class="hidden" />
+{/if}
 
 {#if loaded}
 	<Draggable
+		{createconn}
 		bind:pos
 		bind:zoom
 		initialPos={{

@@ -19,6 +19,7 @@
 
 	let pos: { x: number; y: number } = $state({ x: 0, y: 0 });
 	let focused: number | undefined = $state();
+	let potentialCon: { x: number; y: number } | undefined = $state();
 
 	let zoom = $state(1);
 	const ZOOM_FACTOR = 0.05;
@@ -106,6 +107,7 @@
 			create = undefined;
 		}
 		focused = undefined;
+		potentialCon = undefined;
 	}
 
 	function onmousemove(e: MouseEvent) {
@@ -155,6 +157,19 @@
 			entities = entities;
 		}
 	}
+
+	function createconn(pos: { x: number; y: number }) {
+		console.log('help me', pos);
+		if (potentialCon == undefined) {
+			potentialCon = pos;
+			return;
+		}
+
+		connections.push({ pos1: potentialCon, pos2: pos });
+		connections = connections;
+
+		potentialCon = undefined;
+	}
 </script>
 
 <head>
@@ -184,6 +199,7 @@
 	{#each entities as entity, i}
 		{#if entity.type == 'picture'}
 			<Picture
+				{createconn}
 				bind:focused
 				bind:pos
 				bind:zoom
@@ -193,9 +209,10 @@
 				initialPos={entity.initial}
 			/>
 		{:else if entity.type == 'note'}
-			<Note bind:focused bind:pos bind:zoom index={i} initialPos={entity.initial!} />
+			<Note {createconn} bind:focused bind:pos bind:zoom index={i} initialPos={entity.initial!} />
 		{:else if entity.type == 'document'}
 			<Document
+				{createconn}
 				bind:focused
 				bind:pos
 				bind:zoom
@@ -212,15 +229,24 @@
 <Toolbar bind:create />
 
 {#each connections as connection}
-	<svg class="pointer-events-none fixed inset-0 top-0 left-0 z-[999] h-full w-full">
+	{@const minX = Math.min(connection.pos1.x, connection.pos2.x)}
+	{@const minY = Math.min(connection.pos1.y, connection.pos2.y)}
+	{@const width = Math.abs(connection.pos2.x - connection.pos1.x)}
+	{@const height = Math.abs(connection.pos2.y - connection.pos1.y)}
+
+	<svg
+		style="position:fixed; left:{minX}px; top:{minY}px; overflow:visible; pointer-events:none;"
+		{width}
+		{height}
+		class="z-[9999]"
+	>
 		<line
-			x1={connection.pos1.x - Math.min(connection.pos1.x, connection.pos2.x)}
-			y1={connection.pos1.y - Math.min(connection.pos1.y, connection.pos2.y)}
-			x2={connection.pos2.x - Math.min(connection.pos1.x, connection.pos2.x)}
-			y2={connection.pos2.y - Math.min(connection.pos1.y, connection.pos2.y)}
+			x1={connection.pos1.x - minX}
+			y1={connection.pos1.y - minY}
+			x2={connection.pos2.x - minX}
+			y2={connection.pos2.y - minY}
 			stroke="red"
-			stroke-width={5}
+			stroke-width="5"
 		/>
-		<line x1={0} y1={0} x2={pos.x} y2={pos.y} stroke="red" stroke-width={5} />
 	</svg>
 {/each}

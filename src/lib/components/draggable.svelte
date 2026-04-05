@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Pin from './pin.svelte';
 	import type { Snippet } from 'svelte';
 
 	let {
@@ -11,7 +12,8 @@
 		focused = $bindable(),
 		zoom = $bindable(1),
 		type,
-		aspectRatio
+		aspectRatio,
+		createconn
 	} = $props<{
 		initialPos: { x: number; y: number; w: number; h: number };
 		children: Snippet;
@@ -23,6 +25,7 @@
 		zoom: number;
 		type: 'document' | 'note' | 'picture';
 		aspectRatio?: number;
+		createconn: (pos: { x: number; y: number }) => void;
 	}>();
 
 	let object: { x: number; y: number; w: number; h: number } = $state(initialPos);
@@ -74,6 +77,12 @@
 		resizeStart = { x: e.clientX, y: e.clientY, w: object.w, h: object.h };
 		resizing = true;
 	}
+
+	function pinclick(e: MouseEvent) {
+		e.stopPropagation();
+		console.log('pin gets clicked');
+		createconn({ x: e.clientX, y: e.clientY });
+	}
 </script>
 
 <div
@@ -81,9 +90,8 @@
 	{onmousedown}
 	{ondblclick}
 	class="absolute"
-	style="transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;">
-
-	<img src="/src/lib/assets/pushpin-down.png" class="fixed w-10 h-auto mx-auto left-1/2 -top-5 z-999 select-none">
+	style="transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;"
+>
 	{@render children()}
 
 	{#if type != 'document'}
@@ -94,6 +102,7 @@
 			a
 		</div>
 	{/if}
+	<Pin onclick={pinclick} />
 </div>
 
 <svelte:window {onmouseup} />
