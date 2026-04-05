@@ -73,7 +73,7 @@
 	<div
 		role="navigation"
 		style="transform: rotate({angle}deg)"
-		class="pointer-events-none h-full w-full bg-[url(/src/lib/assets/stickynote.png)] bg-cover select-none"
+		class="pointer-events-none h-full w-full bg-[url(/src/lib/assets/stickynote.png)] drop-shadow-[19px_10px_21px_rgba(0,0,0,0.2)] bg-cover select-none"
 	>
 		{#if !doubleclick}
 			<p

@@ -47,7 +47,6 @@
 		});
 	}
 
-	function onchange() {}
 	function ondragover(e: Event) {
 		e.preventDefault();
 	}
@@ -244,7 +243,7 @@
 	{/each}
 </div>
 
-<Toolbar bind:create />
+<Toolbar bind:create bind:zoom />
 
 {#each connections as connection}
 	{@const p1 = pinpos[connection.i1]}

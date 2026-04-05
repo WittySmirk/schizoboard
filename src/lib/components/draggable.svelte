@@ -38,6 +38,8 @@
 	let offsetX = 0;
 	let offsetY = 0;
 
+	let zCounter = $state(1);
+
 	$effect(() => {
 		if (resizing && resizeStart != undefined) {
 			object.w = resizeStart.w + (pos.x - resizeStart.x) / zoom;
@@ -71,7 +73,8 @@
 	function onclick(e: MouseEvent) {
 		e.stopPropagation();
 		focused = index;
-		//console.log(focused);
+		zCounter++;
+		console.log(zCounter);
 	}
 
 	function resizedown(e: MouseEvent) {
@@ -92,16 +95,15 @@
 	{onmousedown}
 	{ondblclick}
 	class="absolute"
-	style="transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;"
+	style="z-index:{zCounter}; transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;"
 >
 	{@render children()}
 
 	{#if type != 'document'}
 		<div
 			onmousedown={resizedown}
-			class="absolute right-0 bottom-0 h-1 h-4 w-1 w-4 cursor-se-resize bg-blue-500 opacity-0"
+			class="absolute right-0 bottom-0 h-1 h-4 w-1 w-4 cursor-se-resize bg-blue-500 opacity-0 drop-shadow-[19px_10px_21px_rgba(0,0,0,0.2)]"
 		>
-			a
 		</div>
 	{/if}
 	<Pin bind:zoom bind:pos bind:pinPos onclick={pinclick} />

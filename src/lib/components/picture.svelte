@@ -33,6 +33,37 @@
 		natSize = { w: img.naturalWidth, h: img.naturalHeight };
 		loaded = true;
 	}
+
+	let down = $state(false);
+
+	let velX = 0;
+	let smoothVelX = 0;
+	let prev = { x: 0, t: performance.now() };
+
+	const DELTA_ANGLE = 5;
+	let angle = $state(0);
+
+	$effect(() => {
+		if (!down) {
+			return;
+		}
+		const now = performance.now();
+
+		if (!prev) {
+			prev = { x: pos.x, t: now };
+			return;
+		}
+
+		const dt = now - prev.t;
+
+		if (dt > 5) {
+			velX = (pos.x - prev.x) / dt;
+			smoothVelX = 0.8 * smoothVelX + 0.2 * velX;
+			angle = smoothVelX * DELTA_ANGLE;
+		}
+
+		prev = { x: pos.x, t: now };
+	});
 </script>
 
 {#if !loaded}
@@ -45,6 +76,7 @@
 		bind:pos
 		bind:zoom
 		bind:pinPos
+		bind:down
 		initialPos={{
 			x: drop ? drop.x : initialPos.x,
 			y: drop ? drop.y : initialPos.y,
@@ -56,6 +88,6 @@
 		type="picture"
 		{aspectRatio}
 	>
-		<img class="h-full w-full object-cover select-none" {src} />
+		<img class="h-full w-full object-cover select-none drop-shadow-[19px_10px_21px_rgba(0,0,0,0.2)]" style="transform: rotate({angle}deg)" {src} />
 	</Draggable>
 {/if}
