@@ -33,6 +33,8 @@
 	let offsetX = 0;
 	let offsetY = 0;
 
+	let zCounter = $state(1);
+
 	$effect(() => {
 		if (resizing && resizeStart != undefined) {
 			object.w = resizeStart.w + (pos.x - resizeStart.x) / zoom;
@@ -66,7 +68,8 @@
 	function onclick(e: MouseEvent) {
 		e.stopPropagation();
 		focused = index;
-		//console.log(focused);
+		zCounter++;
+		console.log(zCounter);
 	}
 
 	function resizedown(e: MouseEvent) {
@@ -74,6 +77,8 @@
 		resizeStart = { x: e.clientX, y: e.clientY, w: object.w, h: object.h };
 		resizing = true;
 	}
+
+	
 </script>
 
 <div
@@ -81,17 +86,16 @@
 	{onmousedown}
 	{ondblclick}
 	class="absolute"
-	style="transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;">
+	style="z-index:{zCounter}; transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;">
 
-	<img src="/src/lib/assets/pushpin-down.png" class="fixed w-10 h-auto mx-auto left-1/2 -top-5 z-999 select-none">
+	<img src="/src/lib/assets/pushpin-down.png" class="fixed w-10 h-auto left-1/2 -translate-x-1/2 -top-5 z-[999] select-none ">
 	{@render children()}
 
 	{#if type != 'document'}
 		<div
 			onmousedown={resizedown}
-			class="absolute right-0 bottom-0 h-1 h-4 w-1 w-4 cursor-se-resize bg-blue-500 opacity-0"
+			class="absolute right-0 bottom-0 h-1 h-4 w-1 w-4 cursor-se-resize bg-blue-500 opacity-0 drop-shadow-[19px_10px_21px_rgba(0,0,0,0.2)]"
 		>
-			a
 		</div>
 	{/if}
 </div>

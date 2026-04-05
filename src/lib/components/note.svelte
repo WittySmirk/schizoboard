@@ -67,7 +67,7 @@
 	<div
 		role="navigation"
 		style="transform: rotate({angle}deg)"
-		class="h-full w-full bg-[url(/src/lib/assets/stickynote.png)] bg-cover select-none"
+		class="h-full w-full bg-[url(/src/lib/assets/stickynote.png)] drop-shadow-[19px_10px_21px_rgba(0,0,0,0.2)] bg-cover select-none"
 	>
 		{#if !doubleclick}
 			<p class="absolute inset-3 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap select-none">

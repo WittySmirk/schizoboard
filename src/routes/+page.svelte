@@ -41,7 +41,6 @@
 		});
 	}
 
-	function onchange() {}
 	function ondragover(e: Event) {
 		e.preventDefault();
 	}
@@ -213,4 +212,4 @@
 	-->
 </div>
 
-<Toolbar bind:create />
+<Toolbar bind:create bind:zoom/>
