@@ -65,7 +65,7 @@
 	}
 
 	$effect(() => {
-        if (create != undefined) {
+		if (create != undefined) {
 			switch (create) {
 				case 'note':
 					const initial = { x: (pos.x - offset.x) / zoom, y: (pos.y - offset.y) / zoom };
@@ -117,7 +117,7 @@
 		focused = undefined;
 		potentialCon = undefined;
 		selectedYarn = undefined;
-	})
+	});
 
 	function onmousemove(e: MouseEvent) {
 		e.preventDefault();
@@ -265,16 +265,10 @@
 </div>
 
 {#each connections as connection, i}
-	{@const p1 = pinpos[connection.i1]}
-	{@const p2 = pinpos[connection.i2]}
-	{@const PIN_X_OFFSET = -20}
-	{@const PIN_Y_OFFSET = -15}
-	{@const cx1 = p1.x + PIN_X_OFFSET}
-	{@const cy1 = p1.y + PIN_Y_OFFSET}
-	{@const cx2 = p2.x + PIN_X_OFFSET}
-	{@const cy2 = p2.y + PIN_Y_OFFSET}
-	{@const dx = cx2 - cx1}
-	{@const dy = cy2 - cy1}
+	{@const p1 = { x: pinpos[connection.i1].x - 20 * zoom, y: pinpos[connection.i1].y - 15 * zoom }}
+	{@const p2 = { x: pinpos[connection.i2].x - 20 * zoom, y: pinpos[connection.i2].y - 15 * zoom }}
+	{@const dx = p2.x - p1.x}
+	{@const dy = p2.y - p1.y}
 	{@const len = Math.sqrt(dx * dx + dy * dy)}
 	{@const angle = (Math.atan2(dy, dx) * 180) / Math.PI}
 	{@const patternH = Math.min(Math.ceil(25 * zoom), 18)}
@@ -301,7 +295,7 @@
 				/>
 			</pattern>
 		</defs>
-		<g transform="translate({cx1}, {cy1}) rotate({angle})">
+		<g transform="translate({p1.x}, {p1.y}) rotate({angle})">
 			<rect
 				onclick={() => (selectedYarn = i)}
 				class="pointer-events-auto hover:cursor-pointer"
