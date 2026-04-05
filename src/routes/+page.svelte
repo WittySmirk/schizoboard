@@ -163,6 +163,12 @@
 				console.log('removing at ', focused);
 				entities.splice(focused, 1);
 				pinpos.splice(focused, 1);
+				connections.map((c, i) => {
+					if (c.i1 == focused || c.i2 == focused) {
+						connections.splice(i, 1);
+						connections = connections;
+					}
+				});
 				entities = entities;
 				pinpos = pinpos;
 				focused = undefined;
