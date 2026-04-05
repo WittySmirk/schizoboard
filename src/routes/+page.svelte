@@ -249,20 +249,37 @@
 {#each connections as connection}
 	{@const p1 = pinpos[connection.i1]}
 	{@const p2 = pinpos[connection.i2]}
-	<svg
-		style="position:fixed; left:{Math.min(p1.x, p2.x)}px; top:{Math.min(
-			p1.y,
-			p2.y
-		)}px; overflow:visible; pointer-events:none;"
-		class="z-[9999]"
-	>
-		<line
-			x1={p1.x - Math.min(p1.x, p2.x)}
-			y1={p1.y - Math.min(p1.y, p2.y)}
-			x2={p2.x - Math.min(p1.x, p2.x)}
-			y2={p2.y - Math.min(p1.y, p2.y)}
-			stroke="red"
-			stroke-width="5"
-		/>
+	{@const dx = p2.x - p1.x}
+	{@const dy = p2.y - p1.y}
+	{@const len = Math.sqrt(dx * dx + dy * dy)}
+	{@const angle = (Math.atan2(dy, dx) * 180) / Math.PI}
+	<svg style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+		<defs>
+			<pattern
+				id="string-{connection.i1}-{connection.i2}"
+				patternUnits="userSpaceOnUse"
+				width="200"
+				height="50"
+			>
+				<image
+					href="/src/lib/assets/redyarn.png"
+					x="0"
+					y="-20"
+					width="200"
+					height="90"
+					preserveAspectRatio="none"
+				/>
+			</pattern>
+		</defs>
+
+		<g transform="translate({p1.x + 2}, {p1.y - 12}) rotate({angle})">
+			<rect
+				x="0"
+				y="10"
+				width={len}
+				height="10"
+				fill="url(#string-{connection.i1}-{connection.i2})"
+			/>
+		</g>
 	</svg>
 {/each}

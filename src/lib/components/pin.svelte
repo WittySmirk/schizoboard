@@ -13,7 +13,7 @@
 	$effect(() => {
 		const _ = pos;
 		const rect = pin.getBoundingClientRect();
-		pinPos = { x: rect.left, y: rect.top };
+		pinPos = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
 	});
 </script>
 
