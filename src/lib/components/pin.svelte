@@ -2,16 +2,18 @@
 	let {
 		onclick,
 		pos = $bindable(),
-		pinPos = $bindable()
+		pinPos = $bindable(),
+		zoom = $bindable()
 	} = $props<{
 		onclick: (e: MouseEvent) => void;
 		pos: { x: number; y: number };
+		zoom: number;
 		pinPos: { x: number; y: number };
 	}>();
 
 	let pin: HTMLElement;
 	$effect(() => {
-		const _ = pos;
+		const _ = { pos, zoom };
 		const rect = pin.getBoundingClientRect();
 		pinPos = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
 	});

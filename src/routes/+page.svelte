@@ -253,31 +253,40 @@
 	{@const dy = p2.y - p1.y}
 	{@const len = Math.sqrt(dx * dx + dy * dy)}
 	{@const angle = (Math.atan2(dy, dx) * 180) / Math.PI}
+	{@const patternH = Math.ceil(25 * zoom)}
+	{@const patternY = -Math.floor(patternH)}
+	{@const patternW = Math.ceil(200 * zoom)}
+
 	<svg style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;">
 		<defs>
+			<clipPath id="clip-{connection.i1}-{connection.i2}">
+				<rect x="0" y={patternY} width={len} height={patternH} />
+			</clipPath>
 			<pattern
 				id="string-{connection.i1}-{connection.i2}"
 				patternUnits="userSpaceOnUse"
-				width="200"
-				height="50"
+				x="0"
+				y={patternY}
+				width={patternW}
+				height={patternH}
 			>
 				<image
 					href="/src/lib/assets/redyarn.png"
 					x="0"
-					y="-20"
-					width="200"
-					height="90"
+					y="0"
+					width={patternW}
+					height={patternH}
 					preserveAspectRatio="none"
 				/>
 			</pattern>
 		</defs>
 
-		<g transform="translate({p1.x + 2}, {p1.y - 12}) rotate({angle})">
+		<g transform="translate({p1.x}, {p1.y}) rotate({angle})">
 			<rect
 				x="0"
-				y="10"
+				y={patternY}
 				width={len}
-				height="10"
+				height={patternH}
 				fill="url(#string-{connection.i1}-{connection.i2})"
 			/>
 		</g>

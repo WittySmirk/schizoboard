@@ -104,7 +104,7 @@
 			a
 		</div>
 	{/if}
-	<Pin bind:pos bind:pinPos onclick={pinclick} />
+	<Pin bind:zoom bind:pos bind:pinPos onclick={pinclick} />
 </div>
 
 <svelte:window {onmouseup} />
