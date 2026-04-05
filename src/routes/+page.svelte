@@ -271,10 +271,7 @@
 	{@const patternY = -Math.floor(patternH / 2)}
 	{@const patternW = Math.ceil(200 * zoom)}
 
-	<svg
-		onclick={() => (selectedYarn = i)}
-		class="fixed top-0 left-0 h-full w-full hover:cursor-pointer"
-	>
+	<svg class="pointer-events-none fixed top-0 left-0 h-full w-full">
 		<defs>
 			<pattern
 				id="string-{connection.i1}-{connection.i2}"
@@ -296,6 +293,8 @@
 		</defs>
 		<g transform="translate({cx1}, {cy1}) rotate({angle})">
 			<rect
+				onclick={() => (selectedYarn = i)}
+				class="pointer-events-auto hover:cursor-pointer"
 				x="0"
 				y={patternY}
 				width={len}
