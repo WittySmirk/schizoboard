@@ -30,6 +30,7 @@
 	let drop: { x: number; y: number } | undefined = $state();
 
 	let create: 'note' | 'picture' | 'document' | undefined;
+	let selectedYarn: number | undefined;
 
 	function parseFiles(files: FileList, initial?: { x: number; y: number }) {
 		[...files].map((file) => {
@@ -113,6 +114,7 @@
 		}
 		focused = undefined;
 		potentialCon = undefined;
+		selectedYarn = undefined;
 	}
 
 	function onmousemove(e: MouseEvent) {
@@ -156,12 +158,21 @@
 
 	function onkeydown(e: KeyboardEvent) {
 		console.log('here', focused);
-		if (focused != undefined && e.key == 'Backspace') {
-			console.log('removing at ', focused);
-			entities.splice(focused, 1);
-			pinpos.splice(focused, 1);
-			entities = entities;
-			pinpos = pinpos;
+		if (e.key == 'Backspace') {
+			if (focused != undefined && selectedYarn == undefined) {
+				console.log('removing at ', focused);
+				entities.splice(focused, 1);
+				pinpos.splice(focused, 1);
+				entities = entities;
+				pinpos = pinpos;
+				focused = undefined;
+			}
+			if (selectedYarn != undefined) {
+				console.log(selectedYarn);
+				connections.splice(selectedYarn, 1);
+				connections = connections;
+				selectedYarn = undefined;
+			}
 		}
 	}
 
@@ -243,7 +254,7 @@
 	{/each}
 </div>
 
-{#each connections as connection}
+{#each connections as connection, i}
 	{@const p1 = pinpos[connection.i1]}
 	{@const p2 = pinpos[connection.i2]}
 	{@const PIN_X_OFFSET = -20}
@@ -260,7 +271,10 @@
 	{@const patternY = -Math.floor(patternH / 2)}
 	{@const patternW = Math.ceil(200 * zoom)}
 
-	<svg style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+	<svg
+		onclick={() => (selectedYarn = i)}
+		class="fixed top-0 left-0 h-full w-full hover:cursor-pointer"
+	>
 		<defs>
 			<pattern
 				id="string-{connection.i1}-{connection.i2}"
