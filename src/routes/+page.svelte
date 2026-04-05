@@ -243,8 +243,6 @@
 	{/each}
 </div>
 
-<Toolbar bind:create bind:zoom />
-
 {#each connections as connection}
 	{@const p1 = pinpos[connection.i1]}
 	{@const p2 = pinpos[connection.i2]}
@@ -294,7 +292,9 @@
 {#each pinpos as pin}
 	<img
 		src="/src/lib/assets/pushpin-down.png"
-		class="background-red-400 fixed z-[999] mx-auto h-10 w-10 cursor-pointer select-none"
+		class="background-red-400 fixed z-999 mx-auto h-10 w-10 cursor-pointer select-none drop-shadow-[19px_6px_12px_rgba(0,0,0,0.4)]"
 		style="transform: translate({pin.x}px, {pin.y}px);"
 	/>
 {/each}
+
+<Toolbar bind:create bind:zoom />

@@ -6,7 +6,7 @@
 </script>
 
 <div
-	class="fixed z-100 flex h-full w-60 bg-[url(/src/lib/assets/woodtexture2.png)] flex-col pl-6 justify-center gap-15 bg-cover drop-shadow-[19px_10px_21px_rgba(0,0,0,0.5)] brightness-95" style="filter: drop-shadow(19px 10px 21px rgba(0,0,0,{0.5*zoom}))"
+	class="fixed z-[9999] flex h-full w-60 bg-[url(/src/lib/assets/woodtexture2.png)] flex-col pl-6 justify-center gap-15 bg-cover drop-shadow-[19px_10px_21px_rgba(0,0,0,0.5)] brightness-95" style="filter: drop-shadow(19px 10px 21px rgba(0,0,0,{0.5*zoom}))"
 >
 	<button type="button" onclick={() => (create = 'note')}>
 		<img src="src/lib/assets/stickynote-pile.png" class="relative h-35 w-35 drop-shadow-[19px_10px_21px_rgba(0,0,0,0.3)] saturate-40 brightness-95" />
