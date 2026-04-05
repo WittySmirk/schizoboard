@@ -29,6 +29,7 @@
 	},
 	"dependencies": {
 		"@lucide/svelte": "^1.7.0",
+		"@sveltejs/adapter-cloudflare": "^7.2.8",
 		"pdfjs-dist": "^5.6.205",
 		"svelte-pdf-view": "^0.3.3"
 	}
