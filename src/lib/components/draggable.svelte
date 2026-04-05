@@ -67,8 +67,10 @@
 	style="transform: translate({x}px, {y}px);"
 >
 	{#if down}
-		<div class="absolute inset-0 z-10" />
+		<div class="absolute inset-0 z-10 pointer-events-none" />
 	{/if}
+
+	<img src="/src/lib/assets/pushpin-down.png" class="relative w-10 h-auto mx-auto left-3 top-6 z-999">
 	{@render children()}
 </div>
 
