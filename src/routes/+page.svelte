@@ -29,7 +29,9 @@
 	let offset = $state({ x: 0, y: 0 });
 	let drop: { x: number; y: number } | undefined = $state();
 
-	let create: 'note' | 'picture' | 'document' | undefined;
+	let create = $state<'note' | 'picture' | 'document' | undefined>(undefined);
+
+	let zCounter = $state(1);
 	let selectedYarn: number | undefined;
 
 	function parseFiles(files: FileList, initial?: { x: number; y: number }) {
@@ -62,11 +64,11 @@
 		}
 	}
 
-	function onclick(e: MouseEvent) {
-		if (create != undefined) {
+	$effect(() => {
+        if (create != undefined) {
 			switch (create) {
 				case 'note':
-					const initial = { x: (e.clientX - offset.x) / zoom, y: (e.clientY - offset.y) / zoom };
+					const initial = { x: (pos.x - offset.x) / zoom, y: (pos.y - offset.y) / zoom };
 
 					entities.push({
 						type: 'note',
@@ -84,8 +86,8 @@
 							const files = (ev.currentTarget as HTMLInputElement).files;
 							if (files != null) {
 								parseFiles(files, {
-									x: (e.clientX - offset.x) / zoom,
-									y: (e.clientY - offset.y) / zoom
+									x: (pos.x - offset.x) / zoom,
+									y: (pos.y - offset.y) / zoom
 								});
 							}
 						};
@@ -101,8 +103,8 @@
 							const files = (ev.currentTarget as HTMLInputElement).files;
 							if (files != null) {
 								parseFiles(files, {
-									x: (e.clientX - offset.x) / zoom,
-									y: (e.clientY - offset.y) / zoom
+									x: (pos.x - offset.x) / zoom,
+									y: (pos.y - offset.y) / zoom
 								});
 							}
 						};
@@ -115,7 +117,7 @@
 		focused = undefined;
 		potentialCon = undefined;
 		selectedYarn = undefined;
-	}
+	})
 
 	function onmousemove(e: MouseEvent) {
 		e.preventDefault();
@@ -216,7 +218,6 @@
 		{ondrop}
 		{onmousedown}
 		{onmouseup}
-		{onclick}
 	>
 	</canvas>
 
@@ -228,6 +229,7 @@
 				bind:pos
 				bind:zoom
 				bind:pinPos={pinpos[i]}
+				bind:zCounter
 				src={entity.src}
 				index={i}
 				{drop}
@@ -240,6 +242,7 @@
 				bind:pos
 				bind:zoom
 				bind:pinPos={pinpos[i]}
+				bind:zCounter
 				index={i}
 				initialPos={entity.initial!}
 			/>
@@ -250,6 +253,7 @@
 				bind:pos
 				bind:zoom
 				bind:pinPos={pinpos[i]}
+				bind:zCounter
 				type="pdf"
 				src={entity.src!}
 				index={i}

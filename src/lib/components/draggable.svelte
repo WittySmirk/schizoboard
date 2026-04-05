@@ -14,7 +14,8 @@
 		type,
 		aspectRatio,
 		createconn,
-		pinPos = $bindable()
+		pinPos = $bindable(),
+		zCounter = $bindable(1)
 	} = $props<{
 		initialPos: { x: number; y: number; w: number; h: number };
 		children: Snippet;
@@ -28,6 +29,7 @@
 		aspectRatio?: number;
 		createconn: (index: number) => void;
 		pinPos: { x: number; y: number };
+		zCounter: number;
 	}>();
 
 	let object: { x: number; y: number; w: number; h: number } = $state(initialPos);
@@ -38,7 +40,7 @@
 	let offsetX = 0;
 	let offsetY = 0;
 
-	let zCounter = $state(1);
+	let objectZ = $state(1);
 
 	$effect(() => {
 		if (resizing && resizeStart != undefined) {
@@ -55,10 +57,17 @@
 		}
 	});
 
+	function bringToFront() {
+		zCounter += 1;
+		objectZ = zCounter;
+	}
+
 	function onmousedown(e: MouseEvent) {
 		offsetX = object.x - e.clientX / zoom;
 		offsetY = object.y - e.clientY / zoom;
 		down = true;
+
+		bringToFront();
 	}
 
 	function onmouseup() {
@@ -73,8 +82,9 @@
 	function onclick(e: MouseEvent) {
 		e.stopPropagation();
 		focused = index;
-		zCounter++;
 		console.log(zCounter);
+
+		bringToFront();
 	}
 
 	function resizedown(e: MouseEvent) {
@@ -95,7 +105,7 @@
 	{onmousedown}
 	{ondblclick}
 	class="absolute hover:cursor-pointer"
-	style="z-index:{zCounter}; transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;"
+	style="z-index:{objectZ}; transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;"
 >
 	{@render children()}
 

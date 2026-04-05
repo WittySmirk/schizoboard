@@ -8,7 +8,8 @@
 		zoom = $bindable(1),
 		focused = $bindable(),
 		createconn,
-		pinPos = $bindable()
+		pinPos = $bindable(),
+		zCounter = $bindable(),
 	} = $props<{
 		initialPos: { x: number; y: number };
 		pos: { x: number; y: number };
@@ -17,6 +18,7 @@
 		zoom: number;
 		createconn: (index: number) => void;
 		pinPos: { x: number; y: number };
+		zCounter: number;
 	}>();
 	let text = $state('Test');
 
@@ -31,7 +33,7 @@
 	let smoothVelX = 0;
 	let prev = { x: 0, t: performance.now() };
 
-	const DELTA_ANGLE = 5;
+	const DELTA_ANGLE = 4;
 	let angle = $state(0);
 
 	$effect(() => {
@@ -66,6 +68,7 @@
 	bind:doubleclick
 	bind:zoom
 	bind:focused
+	bind:zCounter
 	{index}
 	type="note"
 	aspectRatio={1}
@@ -77,7 +80,7 @@
 	>
 		{#if !doubleclick}
 			<p
-				class="absolute inset-3 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap select-none"
+				class="absolute inset-3 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap select-none text-2xl"
 			>
 				{text}
 			</p>

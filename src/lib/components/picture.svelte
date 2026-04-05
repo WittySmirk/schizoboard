@@ -10,7 +10,8 @@
 		focused = $bindable(),
 		zoom = $bindable(1),
 		createconn,
-		pinPos = $bindable()
+		pinPos = $bindable(),
+		zCounter = $bindable(),
 	} = $props<{
 		initialPos?: { x: number; y: number };
 		src?: string;
@@ -21,6 +22,7 @@
 		zoom: number;
 		createconn: (index: number) => void;
 		pinPos: { x: number; y: number };
+		zCounter: number;
 	}>();
 
 	let aspectRatio: number = $state(0);
@@ -40,7 +42,7 @@
 	let smoothVelX = 0;
 	let prev = { x: 0, t: performance.now() };
 
-	const DELTA_ANGLE = 5;
+	const DELTA_ANGLE = 4;
 	let angle = $state(0);
 
 	$effect(() => {
@@ -77,6 +79,7 @@
 		bind:zoom
 		bind:pinPos
 		bind:down
+		bind:zCounter
 		initialPos={{
 			x: drop ? drop.x : initialPos.x,
 			y: drop ? drop.y : initialPos.y,
@@ -88,6 +91,14 @@
 		type="picture"
 		{aspectRatio}
 	>
-		<img class="h-full w-full object-cover select-none drop-shadow-[19px_10px_21px_rgba(0,0,0,0.2)]" style="transform: rotate({angle}deg)" {src} />
+		<div class="h-full w-full bg-[#ffffed] brightness-95 p-6 pb-20 overflow-hidden drop-shadow-[19px_10px_21px_rgba(0,0,0,0.3)] select-none" style="transform: rotate({angle}deg)">
+			<div class="relative inline block">
+				<img class="w-full h-full object-cover select-none brightness-95 saturate-80" {src}/>
+				
+				<div class="pointer-events-none absolute inset-0 opacity-80 bg-cover mix-blend-overlay bg-[url('/images/film-grain.jpg')]"></div>
+				<div class="pointer-events-none absolute inset-0 opacity-30 bg-cover mix-blend-overlay bg-[url('/images/polaroid.png')]"></div>
+			</div>
+		</div>
+		<!-- <img class="h-full w-full object-cover select-none drop-shadow-[19px_10px_21px_rgba(0,0,0,0.2)]" style="transform: rotate({angle}deg)" {src} /> -->
 	</Draggable>
 {/if}
