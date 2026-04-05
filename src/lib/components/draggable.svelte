@@ -13,7 +13,8 @@
 		zoom = $bindable(1),
 		type,
 		aspectRatio,
-		createconn
+		createconn,
+		pinPos = $bindable()
 	} = $props<{
 		initialPos: { x: number; y: number; w: number; h: number };
 		children: Snippet;
@@ -25,7 +26,8 @@
 		zoom: number;
 		type: 'document' | 'note' | 'picture';
 		aspectRatio?: number;
-		createconn: (pos: { x: number; y: number }) => void;
+		createconn: (index: number) => void;
+		pinPos: { x: number; y: number };
 	}>();
 
 	let object: { x: number; y: number; w: number; h: number } = $state(initialPos);
@@ -81,7 +83,7 @@
 	function pinclick(e: MouseEvent) {
 		e.stopPropagation();
 		console.log('pin gets clicked');
-		createconn({ x: e.clientX, y: e.clientY });
+		createconn(index);
 	}
 </script>
 
@@ -102,7 +104,7 @@
 			a
 		</div>
 	{/if}
-	<Pin onclick={pinclick} />
+	<Pin bind:pos bind:pinPos onclick={pinclick} />
 </div>
 
 <svelte:window {onmouseup} />

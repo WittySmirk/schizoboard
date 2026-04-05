@@ -10,7 +10,8 @@
 		drop,
 		focused = $bindable(),
 		zoom = $bindable(1),
-		createconn
+		createconn,
+		pinPos = $bindable()
 	} = $props<{
 		initialPos?: { x: number; y: number };
 		pos: { x: number; y: number };
@@ -20,7 +21,8 @@
 		drop?: { x: number; y: number };
 		focused: number | undefined;
 		zoom: number;
-		createconn: (pos: { x: number; y: number }) => void;
+		createconn: (index: number) => void;
+		pinPos: { x: number; y: number };
 	}>();
 
 	let down = $state(false);
@@ -31,6 +33,7 @@
 	bind:pos
 	bind:down
 	bind:zoom
+	bind:pinPos
 	{createconn}
 	{index}
 	initialPos={{ x: drop ? drop.x : initialPos.x, y: drop ? drop.y : initialPos.y, w: 650, h: 875 }}

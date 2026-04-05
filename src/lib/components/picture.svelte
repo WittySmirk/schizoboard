@@ -9,7 +9,8 @@
 		drop,
 		focused = $bindable(),
 		zoom = $bindable(1),
-		createconn
+		createconn,
+		pinPos = $bindable()
 	} = $props<{
 		initialPos?: { x: number; y: number };
 		src?: string;
@@ -18,7 +19,8 @@
 		index: number;
 		focused: number | undefined;
 		zoom: number;
-		createconn: (pos: { x: number; y: number }) => void;
+		createconn: (index: number) => void;
+		pinPos: { x: number; y: number };
 	}>();
 
 	let aspectRatio: number = $state(0);
@@ -42,6 +44,7 @@
 		{createconn}
 		bind:pos
 		bind:zoom
+		bind:pinPos
 		initialPos={{
 			x: drop ? drop.x : initialPos.x,
 			y: drop ? drop.y : initialPos.y,

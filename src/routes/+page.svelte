@@ -13,13 +13,13 @@
 	import Toolbar from '$lib/components/toolbar.svelte';
 
 	let entities: entity[] = $state([{ type: 'note', initial: { x: 0, y: 0 } }]);
-	let connections: { pos1: { x: number; y: number }; pos2: { x: number; y: number } }[] = $state([
-		{ pos1: { x: 100, y: 100 }, pos2: { x: 200, y: 200 } }
-	]);
+	let pinpos: { x: number; y: number }[] = $state([]);
+
+	let connections: { i1: number; i2: number }[] = $state([]);
 
 	let pos: { x: number; y: number } = $state({ x: 0, y: 0 });
 	let focused: number | undefined = $state();
-	let potentialCon: { x: number; y: number } | undefined = $state();
+	let potentialCon: number | undefined = $state();
 
 	let zoom = $state(1);
 	const ZOOM_FACTOR = 0.05;
@@ -37,10 +37,12 @@
 			if (file.type.includes('image')) {
 				const src = URL.createObjectURL(file);
 				entities.push({ type: 'picture', src, initial });
+				pinpos.push(initial ?? { x: 0, y: 0 });
 			}
 			if (file.type.includes('pdf')) {
 				const src = URL.createObjectURL(file);
 				entities.push({ type: 'document', src, initial });
+				pinpos.push(initial ?? { x: 0, y: 0 });
 			}
 		});
 	}
@@ -64,10 +66,14 @@
 		if (create != undefined) {
 			switch (create) {
 				case 'note':
+					const initial = { x: (e.clientX - offset.x) / zoom, y: (e.clientY - offset.y) / zoom };
+
 					entities.push({
 						type: 'note',
-						initial: { x: (e.clientX - offset.x) / zoom, y: (e.clientY - offset.y) / zoom }
+						initial
 					});
+					pinpos.push(initial);
+
 					break;
 				case 'picture':
 					{
@@ -154,18 +160,20 @@
 		if (focused != undefined && e.key == 'Backspace') {
 			console.log('removing at ', focused);
 			entities.splice(focused, 1);
+			pinpos.splice(focused, 1);
 			entities = entities;
+			pinpos = pinpos;
 		}
 	}
 
-	function createconn(pos: { x: number; y: number }) {
-		console.log('help me', pos);
+	function createconn(index: number) {
+		console.log('help me', index);
 		if (potentialCon == undefined) {
-			potentialCon = pos;
+			potentialCon = index;
 			return;
 		}
 
-		connections.push({ pos1: potentialCon, pos2: pos });
+		connections.push({ i1: potentialCon, i2: index });
 		connections = connections;
 
 		potentialCon = undefined;
@@ -203,19 +211,29 @@
 				bind:focused
 				bind:pos
 				bind:zoom
+				bind:pinPos={pinpos[i]}
 				src={entity.src}
 				index={i}
 				{drop}
 				initialPos={entity.initial}
 			/>
 		{:else if entity.type == 'note'}
-			<Note {createconn} bind:focused bind:pos bind:zoom index={i} initialPos={entity.initial!} />
+			<Note
+				{createconn}
+				bind:focused
+				bind:pos
+				bind:zoom
+				bind:pinPos={pinpos[i]}
+				index={i}
+				initialPos={entity.initial!}
+			/>
 		{:else if entity.type == 'document'}
 			<Document
 				{createconn}
 				bind:focused
 				bind:pos
 				bind:zoom
+				bind:pinPos={pinpos[i]}
 				type="pdf"
 				src={entity.src!}
 				index={i}
@@ -229,22 +247,20 @@
 <Toolbar bind:create />
 
 {#each connections as connection}
-	{@const minX = Math.min(connection.pos1.x, connection.pos2.x)}
-	{@const minY = Math.min(connection.pos1.y, connection.pos2.y)}
-	{@const width = Math.abs(connection.pos2.x - connection.pos1.x)}
-	{@const height = Math.abs(connection.pos2.y - connection.pos1.y)}
-
+	{@const p1 = pinpos[connection.i1]}
+	{@const p2 = pinpos[connection.i2]}
 	<svg
-		style="position:fixed; left:{minX}px; top:{minY}px; overflow:visible; pointer-events:none;"
-		{width}
-		{height}
+		style="position:fixed; left:{Math.min(p1.x, p2.x)}px; top:{Math.min(
+			p1.y,
+			p2.y
+		)}px; overflow:visible; pointer-events:none;"
 		class="z-[9999]"
 	>
 		<line
-			x1={connection.pos1.x - minX}
-			y1={connection.pos1.y - minY}
-			x2={connection.pos2.x - minX}
-			y2={connection.pos2.y - minY}
+			x1={p1.x - Math.min(p1.x, p2.x)}
+			y1={p1.y - Math.min(p1.y, p2.y)}
+			x2={p2.x - Math.min(p1.x, p2.x)}
+			y2={p2.y - Math.min(p1.y, p2.y)}
 			stroke="red"
 			stroke-width="5"
 		/>

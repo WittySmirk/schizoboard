@@ -7,14 +7,16 @@
 		index,
 		zoom = $bindable(1),
 		focused = $bindable(),
-		createconn
+		createconn,
+		pinPos = $bindable()
 	} = $props<{
 		initialPos: { x: number; y: number };
 		pos: { x: number; y: number };
 		index: number;
 		focused: number | undefined;
 		zoom: number;
-		createconn: (pos: { x: number; y: number }) => void;
+		createconn: (index: number) => void;
+		pinPos: { x: number; y: number };
 	}>();
 	let text = $state('Test');
 
@@ -58,6 +60,7 @@
 <Draggable
 	{createconn}
 	initialPos={{ x: initialPos.x, y: initialPos.y, w: 200, h: 200 }}
+	bind:pinPos
 	bind:pos
 	bind:down
 	bind:doubleclick
