@@ -5,6 +5,7 @@ import { relative, sep } from 'node:path';
 const config = {
 	compilerOptions: {
 		// defaults to rune mode for the project, except for `node_modules`. Can be removed in svelte 6.
+		warningFilter: (warning) => !warning.code.startsWith('a11y'),
 		runes: ({ filename }) => {
 			const relativePath = relative(import.meta.dirname, filename);
 			const pathSegments = relativePath.toLowerCase().split(sep);
