@@ -94,7 +94,7 @@
 	{onclick}
 	{onmousedown}
 	{ondblclick}
-	class="absolute"
+	class="absolute hover:cursor-pointer"
 	style="z-index:{zCounter}; transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;"
 >
 	{@render children()}
@@ -103,8 +103,7 @@
 		<div
 			onmousedown={resizedown}
 			class="absolute right-0 bottom-0 h-1 h-4 w-1 w-4 cursor-se-resize bg-blue-500 opacity-0 drop-shadow-[19px_10px_21px_rgba(0,0,0,0.2)]"
-		>
-		</div>
+		></div>
 	{/if}
 	<Pin bind:zoom bind:pos bind:pinPos onclick={pinclick} />
 </div>
