@@ -80,9 +80,10 @@
 	{onclick}
 	{onmousedown}
 	{ondblclick}
-	class="absolute h-48 w-48"
-	style="transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;"
->
+	class="absolute"
+	style="transform: translate({object.x}px, {object.y}px); width: {object.w}px; height: {object.h}px;">
+
+	<img src="/src/lib/assets/pushpin-down.png" class="fixed w-10 h-auto mx-auto left-1/2 -top-5 z-999 select-none">
 	{@render children()}
 
 	{#if type != 'document'}
