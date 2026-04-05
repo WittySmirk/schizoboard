@@ -5,7 +5,6 @@
 	let {
 		initialPos,
 		pos = $bindable({ x: 0, y: 0 }),
-		type,
 		src,
 		index,
 		drop,
@@ -34,7 +33,7 @@
 	initialPos={{ x: drop ? drop.x : initialPos.x, y: drop ? drop.y : initialPos.y, w: 650, h: 875 }}
 	type="document"
 >
-	<div class="h-full">
+	<div class="h-full select-none">
 		<PdfViewer {src}>
 			<PdfRenderer backgroundColor="#FFFFFF" />
 		</PdfViewer>

@@ -67,10 +67,10 @@
 	<div
 		role="navigation"
 		style="transform: rotate({angle}deg)"
-		class="h-full w-full bg-[url(/src/lib/assets/stickynote.png)] bg-cover"
+		class="h-full w-full bg-[url(/src/lib/assets/stickynote.png)] bg-cover select-none"
 	>
 		{#if !doubleclick}
-			<p class="absolute inset-3 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap">
+			<p class="absolute inset-3 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap select-none">
 				{text}
 			</p>
 		{:else}

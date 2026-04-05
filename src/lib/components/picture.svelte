@@ -48,6 +48,6 @@
 		type="picture"
 		{aspectRatio}
 	>
-		<img class="h-full w-full object-cover" {src} />
+		<img class="h-full w-full object-cover select-none" {src} />
 	</Draggable>
 {/if}
