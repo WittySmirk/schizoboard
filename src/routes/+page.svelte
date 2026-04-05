@@ -12,7 +12,7 @@
 	import Document from '$lib/components/document.svelte';
 	import Toolbar from '$lib/components/toolbar.svelte';
 
-	let entities: entity[] = $state([{ type: 'note', initial: { x: 0, y: 0 } }]);
+	let entities: entity[] = $state([]);
 	let pinpos: { x: number; y: number }[] = $state([]);
 
 	let connections: { i1: number; i2: number }[] = $state([]);

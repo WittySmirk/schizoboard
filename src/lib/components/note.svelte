@@ -20,7 +20,7 @@
 		pinPos: { x: number; y: number };
 		zCounter: number;
 	}>();
-	let text = $state('Test');
+	let text = $state('');
 
 	let down = $state(false);
 	let doubleclick = $state(false);
@@ -86,13 +86,13 @@
 	>
 		{#if !doubleclick}
 			<p
-				class="absolute inset-3 resize-none overflow-hidden text-2xl wrap-break-word whitespace-pre-wrap select-none"
+				class="absolute inset-5 resize-none overflow-hidden text-3xl wrap-break-word whitespace-pre-wrap select-none"
 			>
 				{text}
 			</p>
 		{:else}
 			<textarea
-				class="absolute inset-3 resize-none overflow-hidden wrap-break-word whitespace-pre-wrap"
+				class="absolute inset-5 resize-none overflow-hidden text-3xl wrap-break-word whitespace-pre-wrap"
 				bind:value={text}
 				autofocus
 				{onblur}
