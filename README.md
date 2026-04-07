@@ -1,28 +1,17 @@
-# sv
+# schizoboard
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+## Your favorite way to organize documents, now <a href="https://schizoboard.com">online</a>
 
-## Creating a project
+<img src="./docs/screenshot.png" />
 
-If you're seeing this, you've probably already done this step. Congrats!
+This project was made for <a href="https://blasterhacks-2026.devpost.com/">BlasterHacks 2026</a>
 
-```sh
-# create a new project
-npx sv create my-app
-```
+## Self host
 
-To recreate this project with the same configuration:
+Once you've cloned:
 
 ```sh
-# recreate this project
-npx sv@0.14.0 create --template minimal --types ts --add tailwindcss="plugins:none" prettier --install npm schizoboard
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+npm i
 npm run dev
 
 # or start the server and open the app in a new browser tab
@@ -31,12 +20,6 @@ npm run dev -- --open
 
 ## Building
 
-To create a production version of your app:
-
 ```sh
 npm run build
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
