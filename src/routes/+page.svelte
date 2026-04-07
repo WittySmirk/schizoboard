@@ -210,7 +210,7 @@
 	style="transform-origin: 0 0; transform: translate({offset.x}px, {offset.y}px) scale({zoom})"
 >
 	<canvas
-		class="fixed -z-9999 h-full w-full overflow-hidden bg-[url(/src/lib/assets/corkboard.jpg)] bg-size-[200px] bg-repeat inset-shadow-[0_0_200px_rgba(0,0,0,0.9)] brightness-95"
+		class="fixed -z-9999 h-full w-full overflow-hidden bg-[url(/images/corkboard.jpg)] bg-size-[200px] bg-repeat inset-shadow-[0_0_200px_rgba(0,0,0,0.9)] brightness-95"
 		style="transform-origin: 0 0; transform: scale({1 /
 			zoom}) translate({-offset.x}px, {-offset.y}px);
 					background-size: {50 * zoom}%;
@@ -287,7 +287,7 @@
 				height={patternH}
 			>
 				<image
-					href="/src/lib/assets/redyarn.png"
+					href="/images/redyarn.png"
 					x="0"
 					y="0"
 					width={patternW}
@@ -312,7 +312,7 @@
 
 {#each pinpos as pin}
 	<img
-		src="/src/lib/assets/pushpin-down.png"
+		src="/images/pushpin-down.png"
 		class="background-red-400 fixed z-999 mx-auto cursor-pointer drop-shadow-[19px_6px_12px_rgba(0,0,0,0.4)] select-none"
 		style="transform: translate({pin.x - 35 * zoom}px, {pin.y - 30 * zoom}px); width: {40 *
 			zoom}px; height: {40 * zoom}px;"
